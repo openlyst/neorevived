@@ -21,12 +21,58 @@ rows:
 
 ## Overview
 
-The Pico Enterprise Assistant is a Windows desktop application for managing Pico headsets from a PC. It's not an SDK for app development, but a utility tool for deploying and debugging apps on the headset.
+The Pico Enterprise Assistant is a Windows desktop application for managing Pico headsets from a PC. It is not an SDK for app development but a utility tool for deploying and debugging apps on the headset. It connects via USB and provides a GUI for common device management tasks.
+
+## Connection
+
+The tool connects to the headset via USB using ADB (Android Debug Bridge). The headset must have USB debugging enabled in Developer Options. No additional drivers are required on Windows beyond the standard ADB driver.
 
 ## Features
 
-- Install/uninstall APKs on the headset
-- Device configuration management
-- Screen mirroring from headset to PC
-- Log capture and viewing
-- Firmware update capability
+### App Management
+- **Install APK**: Deploy APK files to the headset by dragging and dropping or browsing
+- **Uninstall**: Remove installed apps from the device
+- **App list**: View all installed applications with package names and versions
+
+### Device Configuration
+- **WiFi configuration**: Set WiFi SSID and password on the headset
+- **Screen brightness**: Adjust headset display brightness
+- **Volume control**: Set media volume on the device
+- **System settings**: Toggle developer options, USB debugging, etc.
+- **Kiosk mode**: Lock the headset to a single application
+- **Home key configuration**: Set home button behavior
+
+### Screen Mirroring
+- Real-time screen mirroring from headset to PC window
+- Supports both 2D and VR mode mirroring
+- Capture screenshots from the mirrored view
+
+### Log Capture
+- View real-time logcat output from the headset
+- Filter by log level (Debug, Info, Warning, Error)
+- Filter by tag or keyword
+- Export logs to file for bug reports
+
+### Firmware Updates
+- Check for available firmware updates
+- Download and install firmware updates to the headset
+- View current firmware version and changelog
+
+### File Management
+- Browse the headset filesystem
+- Upload files from PC to headset
+- Download files from headset to PC
+- Delete files on the headset
+
+### Batch Operations
+- Connect multiple headsets simultaneously
+- Apply configuration changes to multiple devices at once
+- Install APKs to multiple devices in parallel
+
+## Relationship to SDKs
+
+The Enterprise Assistant provides a GUI for many of the same device management functions available programmatically through the PICOEnterprise plugin in the Unreal SDK and the ToB Service APIs in the Platform SDK. It is useful for:
+- Quick device setup during development
+- Deploying test builds without full CI/CD
+- Debugging on-device issues with log capture
+- Enterprise deployments requiring batch configuration
