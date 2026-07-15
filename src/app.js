@@ -300,6 +300,20 @@
           head.appendChild(el("span", "download-type download-latest", "Latest"));
         }
 
+        var stage = null;
+        var v = d.version.toLowerCase();
+        if (v.indexOf("rc") !== -1 || v.indexOf("release candidate") !== -1) {
+          stage = "rc";
+        } else if (v.indexOf("alpha") !== -1 || v.indexOf("a") === 0) {
+          stage = "alpha";
+        } else if (v.indexOf("beta") !== -1 || v.indexOf("b") === 0) {
+          stage = "beta";
+        }
+        if (stage) {
+          var stageLabels = { rc: "Release Candidate", alpha: "Alpha", beta: "Beta" };
+          head.appendChild(el("span", "download-type download-stage-" + stage, stageLabels[stage]));
+        }
+
         var typeLabel = d.isTrackingOnly
           ? "Version tracking only"
           : d.isRawFile

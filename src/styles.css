@@ -268,6 +268,18 @@ td.notes { color: var(--text-dim); font-size: 13px; max-width: 400px; }
   background: #eafaf1;
   color: #22c55e;
 }
+.download-stage-rc {
+  background: #fef3e0;
+  color: #f59e0b;
+}
+.download-stage-alpha {
+  background: #fde8e8;
+  color: #ef4444;
+}
+.download-stage-beta {
+  background: #e7f0fa;
+  color: #3b82f6;
+}
 .download-notes {
   font-size: 13px;
   color: var(--text-dim);
