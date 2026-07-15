@@ -364,6 +364,12 @@
 
   // ---------- wire up events ----------
   function init() {
+    var navToggle = $("nav-toggle");
+    var nav = $("nav");
+    navToggle.addEventListener("click", function () {
+      navToggle.classList.toggle("open");
+      nav.classList.toggle("open");
+    });
     var navLinks = document.querySelectorAll("header nav a");
     for (var i = 0; i < navLinks.length; i++) {
       navLinks[i].addEventListener("click", function (a) {
@@ -372,6 +378,8 @@
             state.category = a.dataset.cat;
             resetFilters();
           }
+          navToggle.classList.remove("open");
+          nav.classList.remove("open");
           showView(a.dataset.page);
         };
       }(navLinks[i]));

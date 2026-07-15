@@ -81,6 +81,28 @@ header .search input {
 }
 header .search input::placeholder { color: #888; }
 header .search input:focus { outline: none; border-color: var(--accent); }
+header .nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin-left: auto;
+}
+header .nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--header-text);
+  border-radius: 1px;
+  transition: 0.2s;
+}
+header .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+header .nav-toggle.open span:nth-child(2) { opacity: 0; }
+header .nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 /* === LAYOUT === */
 .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
@@ -423,13 +445,36 @@ footer a { color: var(--link); cursor: pointer; }
   .specs-table td.spec-key { width: 120px; }
 }
 
-@media (max-width: 560px) {
-  header { flex-wrap: wrap; height: auto; padding: 8px 12px; }
-  header .logo { flex: 1; }
-  header nav { order: 3; width: 100%; }
-  header .search { order: 2; }
-  header .search input { width: 140px; }
-  /* On very small screens, let the table scroll horizontally rather than
-     squash the content into an unreadable column. */
+@media (max-width: 640px) {
+  header { height: 48px; padding: 0 12px; }
+  header .nav-toggle { display: flex; }
+  header nav {
+    display: none;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    background: var(--header-bg);
+    flex-direction: column;
+    padding: 8px 0;
+    border-bottom: 2px solid var(--accent);
+    z-index: 50;
+  }
+  header nav.open { display: flex; }
+  header nav a {
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 0;
+  }
+  header nav a:hover { background: rgba(255,255,255,0.08); }
+  header .search { display: none; }
+  .container { padding: 14px 10px; }
+  .section-head h1 { font-size: 18px; }
+  .detail-head h1 { font-size: 20px; }
+  .markdown-body, .contribute-content { padding: 14px 12px; }
+  .specs-table td.spec-key { width: 100px; font-size: 12px; }
+  .specs-table td { padding: 6px 10px; }
+  .quirk { padding: 8px 12px; }
   .table-wrap { overflow-x: auto; }
+  .filter-bar button { padding: 4px 10px; font-size: 12px; }
 }
