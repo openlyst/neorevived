@@ -30,7 +30,7 @@ rows:
   - key: USB modes
     value: MTP + ADB (<code>persist.sys.usb.config=mtp,adb</code>)
   - key: Bootloader
-    value: Unlocked on this unit (<code>ro.boot.flash.locked=0</code>, <code>ro.boot.verifiedbootstate=orange</code>, <code>ro.boot.vbmeta.device_state=unlocked</code>). <code>ro.oem_unlock_supported=true</code>
+    value: Locked by default can be unlocked.
   - key: Build keys
     value: test-keys
   - key: Target FPS
