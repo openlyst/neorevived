@@ -10,6 +10,11 @@ readme_url: https://gitlab.com/HttpAnimations/piconeo2-wivrn/-/raw/main/README.m
 sourceurl: https://gitlab.com/HttpAnimations/piconeo2-wivrn
 downloads: true
 download_list:
+  - version: RC6
+    url: https://gitlab.com/HttpAnimations/piconeo2-wivrn/-/releases/RC6
+    date: 2026-07-15
+    notes: Eye tracking for Neo 2 Eye, pupil dilation, fix audio stuttering, dynamic bitrate, 21ms motion-to-photon latency, joystick axis fix, recenter position fix
+    commit: 510a0a58a3b83b93e817c4e16c40a0e32e80df95
   - version: RC5
     url: https://gitlab.com/HttpAnimations/piconeo2-wivrn/-/releases/RC5
     date: 2026-07-08
@@ -20,6 +25,15 @@ download_list:
     date: 2026-07-01
     notes: Harden rendering, fix controller buttons, 300Hz tracking, native resolution, IPD slider, microphone support
     commit: 13457b85ce3a656dd60ace3279cdf1a2d05f2313
+  - version: RC3
+    date: 2026-06-20
+    notes: Fix all stuttering and jitters, fix memory leak
+  - version: RC2
+    date: 2026-06-15
+    notes: Port to OpenXR, fix tracking and height, audio support, recenter ability
+  - version: RC1
+    date: 2026-06-10
+    notes: Initial release (PVR-based)
 notes: WiVRn client for the Pico Neo 2 and Neo 2 Eye, stream PC VR over Wi-Fi or USB
 tags:
   - wivrn
