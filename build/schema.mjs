@@ -3,9 +3,10 @@
 // rules stay in one place.
 
 export const ENTRY_CATEGORIES = ["shims", "streaming", "decomp", "projects"];
-export const ALL_CATEGORIES = [...ENTRY_CATEGORIES, "specs", "news"];
+export const ALL_CATEGORIES = [...ENTRY_CATEGORIES, "specs", "sdks", "news"];
 export const STATUSES = ["planned", "in-progress", "working", "broken"];
 export const SPEC_TYPES = ["table", "quirks", "freeform"];
+export const SDK_TYPES = ["table", "freeform"];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const NAME_RE = /^(gitlab|github)\.[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
@@ -171,6 +172,27 @@ export function validateSpecs(file, fm) {
       }
       if (typeof q.label !== "string" || typeof q.desc !== "string") {
         throw fail(file, "each quirk needs string label and desc");
+      }
+    }
+  }
+}
+
+// Validate an SDK file.
+export function validateSdks(file, fm) {
+  requireString(file, fm, "section");
+  requireOneOf(file, fm, "type", SDK_TYPES);
+  if (typeof fm.order !== "number") fm.order = 0;
+
+  if (fm.type === "table") {
+    if (!Array.isArray(fm.rows)) {
+      throw fail(file, 'type "table" requires a "rows" list');
+    }
+    for (const r of fm.rows) {
+      if (typeof r !== "object" || r === null) {
+        throw fail(file, "each row must be an object with key/value");
+      }
+      if (typeof r.key !== "string" || typeof r.value !== "string") {
+        throw fail(file, "each row needs string key and value");
       }
     }
   }

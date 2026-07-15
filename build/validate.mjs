@@ -6,6 +6,7 @@ import {
   validateEntry,
   validateNews,
   validateSpecs,
+  validateSdks,
 } from "./schema.mjs";
 import fs from "node:fs";
 
@@ -34,6 +35,8 @@ for (const f of files) {
       validateNews(f.rel, f.fm, f.baseName);
     } else if (f.category === "specs") {
       validateSpecs(f.rel, f.fm);
+    } else if (f.category === "sdks") {
+      validateSdks(f.rel, f.fm);
     } else {
       validateEntry(f.rel, f.fm, f.category, f.baseName);
     }

@@ -14,6 +14,7 @@
   var ENTRIES = DATA.entries; // { shims: [...], streaming: [...], ... }
   var NEWS = DATA.news;       // [{ id, date, title, author, tags, summary, bodyHtml }]
   var SPECS = DATA.specs;     // [{ section, order, type, rows?|quirks?|bodyHtml? }]
+  var SDKS = DATA.sdks;       // [{ section, order, type, rows?|bodyHtml? }]
 
   var ENTRY_CATS = ["shims", "streaming", "decomp", "projects"];
 
@@ -25,7 +26,7 @@
   }
 
   var state = {
-    view: "listing",     // listing | detail | specs | news | news-detail | contribute | search
+    view: "listing",     // listing | detail | specs | sdks | news | news-detail | contribute | search
     category: "shims",
     statusFilter: "all",
     search: "",
@@ -76,6 +77,7 @@
     }
     if (parts[0] === "news") return { view: "news" };
     if (parts[0] === "specs") return { view: "specs" };
+    if (parts[0] === "sdks") return { view: "sdks" };
     if (parts[0] === "contribute") return { view: "contribute" };
     if (parts[0] === "search") {
       var q = "";
@@ -94,6 +96,7 @@
     else if (view === "news") h = "news";
     else if (view === "news-detail") h = "news/" + encodeURIComponent(state.newsId);
     else if (view === "specs") h = "specs";
+    else if (view === "sdks") h = "sdks";
     else if (view === "contribute") h = "contribute";
     else if (view === "search") h = "search?q=" + encodeURIComponent(state.search);
     if (("#/" + h) !== location.hash) location.hash = "/" + h;
@@ -168,6 +171,10 @@
       setActivePage("specs");
       setActiveNav(function (a) { return a.dataset.page === "specs"; });
       renderSpecs();
+    } else if (view === "sdks") {
+      setActivePage("sdks");
+      setActiveNav(function (a) { return a.dataset.page === "sdks"; });
+      renderSdks();
     } else if (view === "news") {
       setActivePage("news");
       setActiveNav(function (a) { return a.dataset.page === "news"; });
@@ -523,6 +530,45 @@
       container.appendChild(section);
     });
     specsRendered = true;
+  }
+
+  // ---------- sdks ----------
+  var sdksRendered = false;
+  function renderSdks() {
+    if (sdksRendered) return;
+    var container = $("sdks-container");
+    container.innerHTML = "";
+
+    if (!SDKS || SDKS.length === 0) {
+      container.appendChild(el("div", "empty", "No SDKs have been added yet."));
+      sdksRendered = true;
+      return;
+    }
+
+    SDKS.forEach(function (s) {
+      var section = el("div", "specs-section");
+      section.appendChild(el("h2", null, s.section));
+
+      if (s.type === "table" && s.rows) {
+        var tbl = document.createElement("table");
+        tbl.className = "specs-table";
+        s.rows.forEach(function (r) {
+          var tr = document.createElement("tr");
+          var k = el("td", "spec-key", r.key);
+          var v = el("td", "spec-val");
+          v.innerHTML = r.value;
+          tr.appendChild(k); tr.appendChild(v);
+          tbl.appendChild(tr);
+        });
+        section.appendChild(tbl);
+      } else {
+        var free = el("div", "specs-freeform markdown-body");
+        free.innerHTML = s.bodyHtml || "";
+        section.appendChild(free);
+      }
+      container.appendChild(section);
+    });
+    sdksRendered = true;
   }
 
   // ---------- news ----------
