@@ -9,7 +9,7 @@ license: AGPL-3.0
 readme_url: https://gitlab.com/HttpAnimations/pico-linux/-/raw/main/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/pico-linux
 downloads: false
-notes: Porting mainline Linux to the Pico Neo 2 VR headset (Qualcomm SDM845) — downstream 4.9 kernel boots but display, input, USB, audio, WiFi/BT, and camera drivers are still missing
+notes: Porting mainline Linux kernal to the Pico Neo 2.
 tags:
   - pico
   - neo2
