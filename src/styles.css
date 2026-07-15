@@ -52,11 +52,11 @@ header {
 header .logo {
   font-size: 18px;
   font-weight: bold;
-  color: #fff;
+  color: #e0e0e0;
   letter-spacing: 0.5px;
   white-space: nowrap;
 }
-header .logo span { color: #8888cc; }
+header .logo span { color: #e0e0e0; }
 header nav { display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; }
 header nav a {
   color: var(--header-text);
