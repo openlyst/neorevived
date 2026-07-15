@@ -53,4 +53,11 @@ fs.watch(DATA_DIR, { recursive: true }, () => {
 rebuild();
 server.listen(PORT, () => {
   console.log(`dev: serving at http://localhost:${PORT}`);
+  console.log("dev: press Ctrl+C to stop");
+});
+
+process.on("SIGINT", () => {
+  console.log("\ndev: shutting down...");
+  server.close();
+  process.exit(0);
 });
