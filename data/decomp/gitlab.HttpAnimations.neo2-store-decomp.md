@@ -2,7 +2,7 @@
 name: gitlab.HttpAnimations.neo2-store-decomp
 humanname: Pico NEO2 Store Decompilation
 category: decomp
-status: working
+status: in-progress
 updated: 2026-07-15
 author: HttpAnimations
 license: AGPL-3.0
