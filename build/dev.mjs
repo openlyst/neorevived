@@ -1,18 +1,31 @@
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
-import { execSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { ROOT, DATA_DIR } from "./io.mjs";
 
 const PUBLIC_DIR = path.join(ROOT, "public");
+const SRC_DIR = path.join(ROOT, "src");
 const PORT = 3000;
 
+let building = false;
+
 function rebuild() {
-  try {
-    execSync("node build/build.mjs", { stdio: "inherit", cwd: ROOT });
-  } catch {
-    console.error("dev: build failed, serving previous output");
-  }
+  if (building) return;
+  building = true;
+  console.log("dev: rebuilding...");
+  const child = spawn(process.execPath, ["build/build.mjs"], {
+    stdio: "inherit",
+    cwd: ROOT,
+  });
+  child.on("close", (code) => {
+    building = false;
+    if (code === 0) {
+      console.log("dev: rebuild complete");
+    } else {
+      console.error("dev: build failed, serving previous output");
+    }
+  });
 }
 
 const MIME = {
@@ -42,13 +55,13 @@ const server = http.createServer((req, res) => {
 });
 
 let debounceTimer = null;
-fs.watch(DATA_DIR, { recursive: true }, () => {
+function scheduleRebuild() {
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    console.log("dev: data changed, rebuilding...");
-    rebuild();
-  }, 300);
-});
+  debounceTimer = setTimeout(rebuild, 300);
+}
+
+fs.watch(DATA_DIR, { recursive: true }, scheduleRebuild);
+fs.watch(SRC_DIR, { recursive: true }, scheduleRebuild);
 
 rebuild();
 server.listen(PORT, () => {
