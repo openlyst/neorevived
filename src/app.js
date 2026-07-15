@@ -270,6 +270,13 @@
     $("detail-author").textContent = e.author;
     $("detail-license").textContent = e.license || "—";
 
+    var sourceEl = $("detail-source");
+    if (e.sourceUrl) {
+      sourceEl.innerHTML = '<a href="' + escapeHtml(e.sourceUrl) + '" target="_blank" rel="noopener">' + escapeHtml(e.sourceUrl) + '</a>';
+    } else {
+      sourceEl.textContent = "—";
+    }
+
     var tagsEl = $("detail-tags");
     tagsEl.innerHTML = "";
     (e.tags || []).forEach(function (t) { tagsEl.appendChild(el("span", "tag", t)); });

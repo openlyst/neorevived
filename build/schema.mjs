@@ -65,6 +65,7 @@ export function validateEntry(file, fm, expectedCategory, baseName) {
   requireString(file, fm, "notes");
   requireString(file, fm, "license");
   requireString(file, fm, "readme_url");
+  requireString(file, fm, "sourceurl");
   requireArray(file, fm, "tags");
 
   if (fm.category !== expectedCategory) {

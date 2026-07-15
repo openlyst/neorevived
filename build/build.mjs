@@ -84,6 +84,7 @@ async function buildEntries(files) {
       author: f.fm.author,
       license: f.fm.license,
       readmeUrl: f.fm.readme_url,
+      sourceUrl: f.fm.sourceurl,
       tags: Array.isArray(f.fm.tags) ? f.fm.tags : [],
       notes: f.fm.notes,
       bodyHtml: renderMarkdown(readmeMd),
