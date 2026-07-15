@@ -589,6 +589,12 @@ Sets the active tracking mode. `trackingMode` is a bitmask of `XrTrackingMode` v
 
 Must be called after `xrBeginSession`. Changing modes mid-session may cause tracking to briefly drop.
 
+```c
+// Enable 6DOF + eye tracking
+xrSetTrackingModePICO(session,
+    XR_TRACKING_MODE_ROTATION | XR_TRACKING_MODE_POSITION | XR_TRACKING_MODE_EYE);
+```
+
 #### `xrGetTrackingModePICO`
 
 ```c
@@ -596,6 +602,13 @@ XrResult xrGetTrackingModePICO(XrSession session, uint32_t *trackingMode);
 ```
 
 Returns the current tracking mode bitmask.
+
+```c
+uint32_t mode;
+xrGetTrackingModePICO(session, &mode);
+bool hasEyeTracking = (mode & XR_TRACKING_MODE_EYE) != 0;
+bool hasPosition = (mode & XR_TRACKING_MODE_POSITION) != 0;
+```
 
 ### Eye Tracking
 
@@ -628,6 +641,11 @@ XrResult xrSetIPDPICO(XrSession session, float distance);
 
 Sets the interpupillary distance in meters. Typical range is 0.058 to 0.072. This overrides the physical IPD dial setting.
 
+```c
+// Set IPD to 64mm
+xrSetIPDPICO(session, 0.064f);
+```
+
 #### `xrGetIPDPICO`
 
 ```c
@@ -635,6 +653,12 @@ XrResult xrGetIPDPICO(XrSession session, float* ipd);
 ```
 
 Returns the current IPD in meters.
+
+```c
+float ipd;
+xrGetIPDPICO(session, &ipd);
+// ipd is in meters, e.g. 0.064 = 64mm
+```
 
 #### `xrSetTrackingIPDEnabledPICO`
 
@@ -644,6 +668,10 @@ XrResult xrSetTrackingIPDEnabledPICO(XrSession session, bool enable);
 
 Enables/disables IPD-based tracking adjustment. When enabled, the runtime automatically adjusts eye positions based on IPD changes.
 
+```c
+xrSetTrackingIPDEnabledPICO(session, true);
+```
+
 #### `xrGetTrackingIPDEnabledPICO`
 
 ```c
@@ -652,6 +680,11 @@ XrResult xrGetTrackingIPDEnabledPICO(XrSession session, bool* enable);
 
 Returns whether IPD tracking adjustment is enabled.
 
+```c
+bool enabled;
+xrGetTrackingIPDEnabledPICO(session, &enabled);
+```
+
 #### `xrGetEyeTrackingAutoIPDPICO`
 
 ```c
@@ -659,6 +692,12 @@ XrResult xrGetEyeTrackingAutoIPDPICO(XrSession session, float* autoIPD);
 ```
 
 Returns the auto-detected IPD from eye tracking cameras. This is the physical IPD measured by the eye tracking system, which may differ from the dial setting. Requires eye tracking to be enabled.
+
+```c
+float autoIPD;
+xrGetEyeTrackingAutoIPDPICO(session, &autoIPD);
+// autoIPD is the measured physical IPD in meters
+```
 
 ### Foveated Rendering
 
@@ -752,6 +791,13 @@ XrResult xrGetFrustumParametersPICO(
 
 Returns the current view frustum parameters for both eyes. Each `XrViewFrustum` contains left/right/top/bottom/near/far planes and a pose.
 
+```c
+XrViewFrustum leftFrustum, rightFrustum;
+xrGetFrustumParametersPICO(session, &leftFrustum, &rightFrustum);
+// leftFrustum.left, .right, .top, .bottom, .near, .far
+// Use to build custom projection matrices
+```
+
 #### `xrSetFrustumParametersPICO`
 
 ```c
@@ -762,6 +808,12 @@ XrResult xrSetFrustumParametersPICO(
 ```
 
 Overrides the view frustum parameters. This is useful for custom projection matrices or matching external camera frustums for mixed reality capture.
+
+```c
+XrViewFrustum leftF = { -0.05f, 0.05f, 0.04f, -0.04f, 0.1f, 100.0f };
+XrViewFrustum rightF = { -0.05f, 0.05f, 0.04f, -0.04f, 0.1f, 100.0f };
+xrSetFrustumParametersPICO(session, &leftF, &rightF);
+```
 
 ### Sensor Reset
 
@@ -817,6 +869,14 @@ XrResult xrGetConfigsPICO(
 ```
 
 Returns all config values at once. `configCount` is set to the number of values, `configArray` points to runtime-owned memory.
+
+```c
+int count;
+float* configs;
+xrGetConfigsPICO(session, &count, &configs);
+// configs[0] = first config value, configs[1] = second, etc.
+// count = total number of config values
+```
 
 #### `xrSetConfigPICO`
 
@@ -884,6 +944,13 @@ XrResult xrGetPerformanceLevelPICO(
 ```
 
 Returns the current performance level for the specified domain.
+
+```c
+int cpuLevel, gpuLevel;
+xrGetPerformanceLevelPICO(session, XR_PERF_SETTINGS_DOMAIN_CPU_EXT, &cpuLevel);
+xrGetPerformanceLevelPICO(session, XR_PERF_SETTINGS_DOMAIN_GPU_EXT, &gpuLevel);
+// cpuLevel/gpuLevel: 0=power saver, 1=normal, 2=high, 3=turbo
+```
 
 ### Boundary / Guardian System
 
@@ -966,6 +1033,18 @@ XrResult xrBoundaryTestNodePICO(
 
 Same as `xrBoundaryTestPointPICO` but tests a tracked node (e.g. head, controller) by its node ID instead of an explicit point. The runtime uses the node's current tracked position.
 
+```c
+bool triggering;
+float closestDist, px, py, pz, nx, ny, nz;
+int ret;
+// Test head node (2) against outer boundary
+xrBoundaryTestNodePICO(session, 2, false,
+    &triggering, &closestDist, &px, &py, &pz, &nx, &ny, &nz, &ret);
+if (triggering) {
+    // Head is too close to boundary
+}
+```
+
 #### `xrGetBoundaryGeometryPICO`
 
 ```c
@@ -997,6 +1076,13 @@ XrResult xrGetBoundaryDimensionsPICO(
 
 Returns the dimensions (width, height, depth) of the boundary or play area.
 
+```c
+float x, y, z;
+int ret;
+xrGetBoundaryDimensionsPICO(session, &x, &y, &z, false, &ret);
+// x=width, y=height, z=depth of outer boundary
+```
+
 #### `xrSetControllerPositionPICO`
 
 ```c
@@ -1011,6 +1097,16 @@ XrResult xrSetControllerPositionPICO(
 ```
 
 Overrides the controller position and orientation. `x,y,z,w` is the orientation quaternion, `px,py,pz` is the position. `hand` is 0=left, 1=right. `valid` indicates if the pose is valid. `keyEvent` can pass a key event. This is used for simulated/controller-less scenarios.
+
+```c
+// Set left controller pose to origin, facing forward
+xrSetControllerPositionPICO(session,
+    0.0f, 0.0f, 0.0f, 1.0f,   // identity quaternion
+    0.0f, 1.0f, 0.0f,         // position at (0,1,0)
+    0,                         // left hand
+    true,                      // valid pose
+    0);                        // no key event
+```
 
 ### See-Through Camera
 
@@ -1058,6 +1154,13 @@ XrResult xrSetMrcPose(
 
 Sets the MRC camera pose. The orientation is a quaternion `(x,y,z,w)` and position is `(px,py,pz)`. This tells the runtime where the external camera is positioned relative to the tracking origin.
 
+```c
+// Place MRC camera 2m in front, 1.5m up, looking forward
+xrSetMrcPose(session,
+    0.0f, 0.0f, 0.0f, 1.0f,    // identity quaternion (forward)
+    0.0f, 1.5f, -2.0f);         // position
+```
+
 #### `xrGetMrcPose`
 
 ```c
@@ -1079,6 +1182,12 @@ XrResult xrSetMrcPosePICO(
 ```
 
 PICO-specific MRC pose setter. Functionally identical to `xrSetMrcPose` but loaded via the `XR_PICO_mrc_pose_ext_enable` extension.
+
+```c
+xrSetMrcPosePICO(session,
+    0.0f, 0.0f, 0.0f, 1.0f,    // identity quaternion
+    0.0f, 1.5f, -2.0f);         // position
+```
 
 #### `xrGetMrcPosePICO`
 
@@ -1165,6 +1274,11 @@ XrResult xrSetMainControllerHandlePico(
 
 Sets which controller is the "main" (primary) controller. This affects UI handedness and which controller's input is prioritized. `controllerHandle` is 0 (left) or 1 (right).
 
+```c
+// Set right controller as main
+xrSetMainControllerHandlePico(instance, 1);
+```
+
 #### `xrGetMainControllerHandlePico`
 
 ```c
@@ -1174,6 +1288,12 @@ XrResult xrGetMainControllerHandlePico(
 ```
 
 Returns the current main controller handle (0=left, 1=right).
+
+```c
+int mainHandle;
+xrGetMainControllerHandlePico(instance, &mainHandle);
+// mainHandle: 0=left, 1=right
+```
 
 #### `xrGetControllerSensorDataPico`
 
@@ -1189,6 +1309,14 @@ Returns controller sensor data (pose, IMU). `headSensorData` is an input array c
 
 The `data` output typically contains position (3 floats), orientation (4 floats as quaternion), velocity, angular velocity, etc. The exact layout depends on the runtime version.
 
+```c
+float headData[16];
+float controllerData[16];
+xrGetHeadSensorDataPico(instance, headData);
+xrGetControllerSensorDataPico(instance, 0, headData, controllerData);
+// controllerData[0..2] = position, [3..6] = orientation quaternion
+```
+
 #### `xrGetControllerSensorDataPredictPico`
 
 ```c
@@ -1202,6 +1330,14 @@ XrResult xrGetControllerSensorDataPredictPico(
 
 Same as `xrGetControllerSensorDataPico` but predicts the controller pose `predictTime` seconds into the future. Useful for rendering with motion prediction to reduce latency.
 
+```c
+float headData[16];
+float predictedData[16];
+xrGetHeadSensorDataPico(instance, headData);
+// Predict 20ms into the future
+xrGetControllerSensorDataPredictPico(instance, 0, headData, 0.020f, predictedData);
+```
+
 #### `xrGetControllerFixedSensorStatePico`
 
 ```c
@@ -1212,6 +1348,12 @@ XrResult xrGetControllerFixedSensorStatePico(
 ```
 
 Returns the controller's fixed sensor state — the raw sensor values without prediction or filtering applied.
+
+```c
+float rawData[16];
+xrGetControllerFixedSensorStatePico(instance, 0, rawData);
+// rawData contains unfiltered sensor values
+```
 
 #### `xrGetControllerTouchValuePico`
 
@@ -1243,6 +1385,14 @@ XrResult xrGetControllerGripValuePico(
 
 Returns the grip button value (0 = not pressed, 1 = fully pressed).
 
+```c
+int gripValue;
+xrGetControllerGripValuePico(instance, 0, &gripValue);
+if (gripValue > 0) {
+    // Grip button is being pressed
+}
+```
+
 #### `xrGetControllerLinearVelocityStatePico`
 
 ```c
@@ -1253,6 +1403,12 @@ XrResult xrGetControllerLinearVelocityStatePico(
 ```
 
 Returns the controller's linear velocity (3 floats: x, y, z in m/s).
+
+```c
+float velocity[3];
+xrGetControllerLinearVelocityStatePico(instance, 0, velocity);
+// velocity[0]=x, [1]=y, [2]=z in m/s
+```
 
 #### `xrGetControllerAngularVelocityStatePico`
 
@@ -1265,6 +1421,12 @@ XrResult xrGetControllerAngularVelocityStatePico(
 
 Returns the controller's angular velocity (3 floats: x, y, z in rad/s).
 
+```c
+float angVel[3];
+xrGetControllerAngularVelocityStatePico(instance, 0, angVel);
+// angVel[0]=x, [1]=y, [2]=z in rad/s
+```
+
 #### `xrGetControllerAccelerationStatePico`
 
 ```c
@@ -1276,6 +1438,12 @@ XrResult xrGetControllerAccelerationStatePico(
 
 Returns the controller's linear acceleration (3 floats: x, y, z in m/s²).
 
+```c
+float accel[3];
+xrGetControllerAccelerationStatePico(instance, 0, accel);
+// accel[0]=x, [1]=y, [2]=z in m/s²
+```
+
 #### `xrGetHeadSensorDataPico`
 
 ```c
@@ -1285,6 +1453,13 @@ XrResult xrGetHeadSensorDataPico(
 ```
 
 Returns the HMD head sensor data (pose + IMU). Used as input to `xrGetControllerSensorDataPico` for relative coordinate calculations.
+
+```c
+float headData[16];
+xrGetHeadSensorDataPico(instance, headData);
+// headData[0..2] = position, [3..6] = orientation quaternion
+// Pass headData to xrGetControllerSensorDataPico
+```
 
 #### `xrSetPhyControllerEnableKeyPico`
 
@@ -1315,6 +1490,11 @@ XrResult xrSetPhyControllerEnterPairingPico(
 
 Puts a controller into pairing mode. `device` is 0 (left) or 1 (right).
 
+```c
+// Put left controller into pairing mode
+xrSetPhyControllerEnterPairingPico(instance, 0);
+```
+
 #### `xrSetPhyControllerStopPairingPico`
 
 ```c
@@ -1325,6 +1505,11 @@ XrResult xrSetPhyControllerStopPairingPico(
 
 Stops pairing mode for a controller.
 
+```c
+// Stop pairing mode for left controller
+xrSetPhyControllerStopPairingPico(instance, 0);
+```
+
 #### `xrSetPhyControllerUnbindPico`
 
 ```c
@@ -1334,6 +1519,11 @@ XrResult xrSetPhyControllerUnbindPico(
 ```
 
 Unbinds a controller from the HMD.
+
+```c
+// Unbind left controller
+xrSetPhyControllerUnbindPico(instance, 0);
+```
 
 #### `xrSetPhyControllerUpgradePico`
 
@@ -1348,6 +1538,15 @@ XrResult xrSetPhyControllerUpgradePico(
 
 Triggers a firmware upgrade for a controller. `devicetype` is the controller type, `rule` is the upgrade rule, and the path arguments specify the firmware file paths on the station and controller.
 
+```c
+// Upgrade left controller firmware
+xrSetPhyControllerUpgradePico(instance,
+    0,                          // device type
+    1,                          // upgrade rule
+    "/sdcard/firmware/station.bin",
+    "/sdcard/firmware/controller.bin");
+```
+
 ### Deprecated CMC Functions (not used since 2021/07)
 
 These functions are marked as deprecated in the header. They should not be used in new code but are documented for reference.
@@ -1360,6 +1559,10 @@ XrResult xrSetEngineVersionPico(XrInstance instance, const char* version);
 
 Sets the engine version string. The sample app calls this on resume with `"2.8.0.1"` and on pause with `"2.7.0.0"`.
 
+```c
+xrSetEngineVersionPico(instance, "2.8.0.1");
+```
+
 #### `xrSetControllerEventCallbackPico`
 
 ```c
@@ -1369,6 +1572,11 @@ XrResult xrSetControllerEventCallbackPico(
 ```
 
 Enables/disables controller event callbacks. When enabled, `XrControllerEventChanged` events are dispatched via `xrPollEvent`.
+
+```c
+xrSetControllerEventCallbackPico(instance, true);
+// Controller events will now arrive via xrPollEvent
+```
 
 #### `xrResetControllerSensorPico`
 
@@ -1380,6 +1588,11 @@ XrResult xrResetControllerSensorPico(
 
 Resets the sensor for a specific controller. Similar to `xrResetSensorPICO` but for a single controller.
 
+```c
+// Reset left controller sensor
+xrResetControllerSensorPico(instance, 0);
+```
+
 #### `xrGetConnectDeviceMacPico`
 
 ```c
@@ -1387,6 +1600,12 @@ XrResult xrGetConnectDeviceMacPico(XrInstance instance, char* mac);
 ```
 
 Returns the MAC address of the connected device.
+
+```c
+char mac[32];
+xrGetConnectDeviceMacPico(instance, mac);
+// mac = e.g. "AA:BB:CC:DD:EE:FF"
+```
 
 #### `xrStartCVControllerThreadPico`
 
@@ -1415,6 +1634,10 @@ XrResult xrStopCVControllerThreadPico(
 
 Stops the CV controller tracking thread. Called on pause in the sample app.
 
+```c
+xrStopCVControllerThreadPico(instance, PXR_HMD_6DOF, PXR_CONTROLLER_6DOF);
+```
+
 #### `xrResetHeadSensorForControllerPico`
 
 ```c
@@ -1422,6 +1645,10 @@ XrResult xrResetHeadSensorForControllerPico(XrInstance instance);
 ```
 
 Resets the head sensor for controller tracking. Used to recenter the controller tracking reference frame.
+
+```c
+xrResetHeadSensorForControllerPico(instance);
+```
 
 #### `xrSetIsEnbleHomeKeyPico`
 
@@ -1432,6 +1659,11 @@ XrResult xrSetIsEnbleHomeKeyPico(
 ```
 
 Enables or disables the Home button on the controller. When disabled, pressing Home does not trigger the system home action.
+
+```c
+// Disable Home button
+xrSetIsEnbleHomeKeyPico(instance, false);
+```
 
 ## PICO Extension Reference
 
