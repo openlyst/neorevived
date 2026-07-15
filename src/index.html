@@ -263,10 +263,10 @@ quirks:
       </ul>
       <ul style="margin-left: 20px;">
         <li><code>version</code>: version label (e.g. <code>RC5</code>, <code>v0.3</code>)</li>
-        <li><code>url</code>: direct download link or release page URL</li>
+        <li><code>url</code>: direct download link or release page URL. Optional — if omitted, the version is listed for tracking only with no download link</li>
         <li><code>date</code>: release date in <code>YYYY-MM-DD</code> format</li>
         <li><code>notes</code>: optional short changelog for that version</li>
-        <li><code>commit</code>: required — full commit hash (e.g. <code>fa32a521f16d3f697b6357c737940df3548301b2</code>) or full commit URL. If a bare hash is provided and <code>sourceurl</code> is a GitLab/GitHub URL, the build auto-generates the commit link</li>
+        <li><code>commit</code>: full commit hash (e.g. <code>fa32a521f16d3f697b6357c737940df3548301b2</code>) or full commit URL. Required when <code>url</code> is present. If both <code>url</code> and <code>commit</code> are omitted, the entry is version-tracking only. If a bare hash is provided and <code>sourceurl</code> is a GitLab/GitHub URL, the build auto-generates the commit link</li>
       </ul>
       <ul>
         <li><code>notes</code>: one-line summary shown in the listing table</li>
