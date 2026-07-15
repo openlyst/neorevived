@@ -25,7 +25,7 @@
   }
 
   var state = {
-    view: "listing",     // listing | detail | specs | news | news-detail | contribute
+    view: "listing",     // listing | detail | specs | news | news-detail | contribute | search
     category: "shims",
     statusFilter: "all",
     search: "",
@@ -77,6 +77,12 @@
     if (parts[0] === "news") return { view: "news" };
     if (parts[0] === "specs") return { view: "specs" };
     if (parts[0] === "contribute") return { view: "contribute" };
+    if (parts[0] === "search") {
+      var q = "";
+      var qIdx = h.indexOf("?q=");
+      if (qIdx !== -1) q = decodeURIComponent(h.substring(qIdx + 3));
+      return { view: "search", query: q };
+    }
     if (ENTRY_CATS.indexOf(parts[0]) !== -1) return { view: "listing", category: parts[0] };
     return null;
   }
@@ -89,6 +95,7 @@
     else if (view === "news-detail") h = "news/" + encodeURIComponent(state.newsId);
     else if (view === "specs") h = "specs";
     else if (view === "contribute") h = "contribute";
+    else if (view === "search") h = "search?q=" + encodeURIComponent(state.search);
     if (("#/" + h) !== location.hash) location.hash = "/" + h;
   }
 
@@ -115,6 +122,9 @@
       if (!post) { showView("news"); return; }
       state.newsId = p.id;
       showView("news-detail");
+    } else if (p.view === "search") {
+      state.search = p.query;
+      showView("search");
     } else {
       showView(p.view);
     }
@@ -169,6 +179,10 @@
     } else if (view === "contribute") {
       setActivePage("contribute");
       setActiveNav(function (a) { return a.dataset.page === "contribute"; });
+    } else if (view === "search") {
+      setActivePage("search");
+      setActiveNav(function (a) { return false; });
+      renderSearchResults();
     }
   }
 
@@ -257,6 +271,85 @@
       state.sortDir = "asc";
     }
     renderTable();
+  }
+
+  // ---------- search ----------
+  function renderSearchResults() {
+    var q = state.search.toLowerCase().trim();
+    var results = [];
+
+    var pageInput = $("search-page-input");
+    if (pageInput && pageInput.value !== state.search) pageInput.value = state.search;
+    if ($("search-input").value !== state.search) $("search-input").value = state.search;
+
+    if (q) {
+      ENTRY_CATS.forEach(function (cat) {
+        var list = ENTRIES[cat] || [];
+        list.forEach(function (e) {
+          if (
+            (e.humanname || e.name).toLowerCase().indexOf(q) !== -1 ||
+            e.name.toLowerCase().indexOf(q) !== -1 ||
+            e.notes.toLowerCase().indexOf(q) !== -1 ||
+            e.status.toLowerCase().indexOf(q) !== -1 ||
+            (e.tags || []).some(function (t) { return t.toLowerCase().indexOf(q) !== -1; })
+          ) {
+            results.push(e);
+          }
+        });
+      });
+    }
+
+    results.sort(function (a, b) {
+      var an = (a.humanname || a.name).toLowerCase();
+      var bn = (b.humanname || b.name).toLowerCase();
+      if (an < bn) return -1;
+      if (an > bn) return 1;
+      return 0;
+    });
+
+    $("search-count").textContent = results.length + " result" + (results.length === 1 ? "" : "s");
+
+    var container = $("search-results");
+    if (!q) {
+      container.innerHTML = '<div class="empty">Type something above to search across all entries.</div>';
+      return;
+    }
+    if (results.length === 0) {
+      container.innerHTML = '<div class="empty">No entries found for "' + escapeHtml(state.search) + '".</div>';
+      return;
+    }
+
+    var html = results.map(function (e) {
+      return (
+        '<div class="search-result" data-cat="' + escapeHtml(e.category) + '" data-name="' + escapeHtml(e.name) + '">' +
+          '<div class="search-result-main">' +
+            '<div class="search-result-name">' + escapeHtml(e.humanname || e.name) + '</div>' +
+            '<div class="search-result-notes">' + escapeHtml(e.notes) + '</div>' +
+          '</div>' +
+          '<div class="search-result-side">' +
+            '<span class="search-result-cat">' + escapeHtml(e.category) + '</span>' +
+            '<span class="status status-' + escapeHtml(e.status) + '">' + escapeHtml(e.status) + '</span>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join("");
+    container.innerHTML = html;
+
+    var items = container.querySelectorAll(".search-result");
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("click", onSearchResultClick);
+    }
+  }
+
+  function onSearchResultClick(ev) {
+    var item = ev.currentTarget;
+    var category = item.dataset.cat;
+    var name = item.dataset.name;
+    var entry = findEntry(category, name);
+    if (!entry) return;
+    state.category = category;
+    state.entry = entry;
+    showView("detail");
   }
 
   // ---------- detail ----------
@@ -494,9 +587,31 @@
       }(navLinks[i]));
     }
 
+    $("search-input").addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.keyCode === 13) {
+        ev.preventDefault();
+        state.search = ev.target.value;
+        showView("search");
+      }
+    });
+
     $("search-input").addEventListener("input", function (ev) {
+      if (state.view === "search") {
+        state.search = ev.target.value;
+        renderSearchResults();
+        setHash("search");
+      } else if (state.view === "listing") {
+        state.search = ev.target.value;
+        renderTable();
+      }
+    });
+
+    var searchPageInput = $("search-page-input");
+    searchPageInput.addEventListener("input", function (ev) {
       state.search = ev.target.value;
-      if (state.view === "listing") renderTable();
+      $("search-input").value = ev.target.value;
+      renderSearchResults();
+      setHash("search");
     });
 
     var filterBtns = document.querySelectorAll("#filter-bar button");
