@@ -9,7 +9,7 @@ license: AGPL-3.0
 readme_url: https://gitlab.com/HttpAnimations/contractors-obb-patcher/-/raw/master/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/contractors-obb-patcher
 downloads: false
-notes: Patches the Contractors VR PICO APK to bypass Google Play Store key and OBB validation checks — modifies smali bytecode in DownloaderActivity to skip store key requirement so the game boots directly
+notes: Patch Contractors APK to bypass Google Play Store.
 tags:
   - apk
   - pico
