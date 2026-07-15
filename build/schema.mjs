@@ -8,6 +8,7 @@ export const STATUSES = ["planned", "in-progress", "working", "broken"];
 export const SPEC_TYPES = ["table", "quirks", "freeform"];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const NAME_RE = /^(gitlab|github)\.[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 
 export function fail(file, msg) {
   const err = new Error(`${file}: ${msg}`);
@@ -75,6 +76,12 @@ export function validateEntry(file, fm, expectedCategory, baseName) {
     throw fail(
       file,
       `name "${fm.name}" must match filename "${baseName}.md"`
+    );
+  }
+  if (!NAME_RE.test(fm.name)) {
+    throw fail(
+      file,
+      `name "${fm.name}" must follow the format: platform.owner.project (e.g. gitlab.HttpAnimations.neorevived)`
     );
   }
 }

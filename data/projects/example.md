@@ -1,5 +1,5 @@
 ---
-name: example
+name: gitlab.your-group.your-project
 category: projects
 status: planned
 updated: 2026-01-01
