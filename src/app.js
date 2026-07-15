@@ -17,6 +17,13 @@
 
   var ENTRY_CATS = ["shims", "streaming", "decomp", "projects"];
 
+  function formatDate(d) {
+    if (!d) return "";
+    var parts = d.split("-");
+    if (parts.length !== 3) return d;
+    return parts[0] + "/" + parts[1] + "/" + parts[2];
+  }
+
   var state = {
     view: "listing",     // listing | detail | specs | news | news-detail | contribute
     category: "shims",
@@ -216,7 +223,7 @@
         '<tr class="entry-row" data-cat="' + escapeHtml(e.category) + '" data-name="' + escapeHtml(e.name) + '">' +
           '<td class="name"><a>' + escapeHtml(e.humanname || e.name) + '</a></td>' +
           '<td><span class="status status-' + escapeHtml(e.status) + '">' + escapeHtml(e.status) + '</span></td>' +
-          '<td class="updated">' + escapeHtml(e.updated) + '</td>' +
+          '<td class="updated">' + escapeHtml(formatDate(e.updated)) + '</td>' +
           '<td class="notes">' + escapeHtml(e.notes) + '</td>' +
         '</tr>'
       );
@@ -266,7 +273,7 @@
     statusEl.textContent = e.status;
     statusEl.className = "status status-" + e.status;
 
-    $("detail-updated").textContent = e.updated;
+    $("detail-updated").textContent = formatDate(e.updated);
     $("detail-author").textContent = e.author;
     $("detail-license").textContent = e.license || "—";
 
@@ -299,7 +306,7 @@
         var head = el("div", "download-head");
         var version = el("span", "download-version", d.version);
         head.appendChild(version);
-        head.appendChild(el("span", "download-date", d.date));
+        head.appendChild(el("span", "download-date", formatDate(d.date)));
 
         if (idx === 0) {
           head.appendChild(el("span", "download-type download-latest", "Latest"));
@@ -436,7 +443,7 @@
     }
     NEWS.forEach(function (p) {
       var item = el("div", "news-item");
-      item.appendChild(el("div", "news-date", p.date));
+      item.appendChild(el("div", "news-date", formatDate(p.date)));
       item.appendChild(el("div", "news-title", p.title));
       item.appendChild(el("div", "news-summary", p.summary));
       var tags = el("div", "news-tags");
@@ -455,7 +462,7 @@
     if (!p) { showView("news"); return; }
     $("news-detail-title").textContent = p.title;
     $("news-detail-breadcrumb").textContent = p.title;
-    $("news-detail-date").textContent = p.date;
+    $("news-detail-date").textContent = formatDate(p.date);
     $("news-detail-author").textContent = p.author;
     var tagsEl = $("news-detail-tags");
     tagsEl.innerHTML = "";
