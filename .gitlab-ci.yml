@@ -1,0 +1,55 @@
+# NeoRevived CI — validate frontmatter, build the static site, deploy to Pages.
+stages:
+  - validate
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "20"
+
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - node_modules/
+
+# Runs on every push and MR. Fails the pipeline on bad frontmatter.
+validate:
+  stage: validate
+  image: node:${NODE_VERSION}
+  script:
+    - npm ci
+    - npm run validate
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+# Builds the static site into public/. Artifact is consumed by the pages job.
+build:
+  stage: build
+  image: node:${NODE_VERSION}
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 day
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+# Deploys to GitLab Pages. Only on the default branch, only when build passes.
+pages:
+  stage: deploy
+  image: node:${NODE_VERSION}
+  dependencies:
+    - build
+  script:
+    - echo "Deploying public/ to GitLab Pages"
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

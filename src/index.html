@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeoRevived — Pico Neo 2 Revival Tracker</title>
+<meta name="description" content="A static, account-free tracker for the Pico Neo 2 headset revival effort. All content contributed via merge requests.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<noscript>
+  <div class="noscript">
+    <h1>NeoRevived</h1>
+    <p>This site's browsing interface needs JavaScript enabled. The content itself is plain markdown in the <code>/data</code> folder of the source repository, so you can read it there without JavaScript:</p>
+    <p><a href="https://gitlab.com/HttpAnimations/neorevived/-/tree/main/data">Browse /data on GitLab</a></p>
+  </div>
+</noscript>
+
+<header>
+  <div class="logo">Neo<span>Revived</span></div>
+  <nav id="nav">
+    <a data-page="listing" data-cat="shims">Shims</a>
+    <a data-page="listing" data-cat="streaming">Streaming</a>
+    <a data-page="listing" data-cat="decomp">Decomp</a>
+    <a data-page="listing" data-cat="projects">Projects</a>
+    <a data-page="specs">Specs</a>
+    <a data-page="news">News</a>
+    <a data-page="contribute">Contribute</a>
+  </nav>
+  <div class="search">
+    <input type="text" placeholder="Search entries..." id="search-input" autocomplete="off">
+  </div>
+</header>
+
+<!-- ============ PAGE: LISTING ============ -->
+<div class="page" id="page-listing">
+  <div class="container">
+    <div class="section-head">
+      <h1 id="cat-title">Shims</h1>
+      <span class="count" id="entry-count">0 entries</span>
+    </div>
+    <div class="filter-bar" id="filter-bar">
+      <button class="active" data-status="all">All</button>
+      <button data-status="working">Working</button>
+      <button data-status="in-progress">In Progress</button>
+      <button data-status="broken">Broken</button>
+      <button data-status="planned">Planned</button>
+    </div>
+    <div class="table-wrap">
+      <table id="entry-table">
+        <thead>
+          <tr>
+            <th data-sort="name">Name</th>
+            <th data-sort="status">Status</th>
+            <th data-sort="updated">Updated</th>
+            <th data-sort="notes">Notes</th>
+          </tr>
+        </thead>
+        <tbody id="entry-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE: DETAIL ============ -->
+<div class="page" id="page-detail">
+  <div class="container">
+    <div class="detail-head">
+      <div class="breadcrumb">
+        <a id="detail-back">Shims</a> / <span id="detail-breadcrumb-name"></span>
+      </div>
+      <h1 id="detail-title"></h1>
+      <div class="detail-meta">
+        <div class="meta-item"><span class="meta-label">Status:</span><span class="status" id="detail-status"></span></div>
+        <div class="meta-item"><span class="meta-label">Updated:</span><span id="detail-updated"></span></div>
+        <div class="meta-item"><span class="meta-label">Author:</span><span id="detail-author"></span></div>
+      </div>
+      <div class="detail-tags" id="detail-tags"></div>
+    </div>
+    <div class="markdown-body" id="detail-body"></div>
+  </div>
+</div>
+
+<!-- ============ PAGE: SPECS ============ -->
+<div class="page" id="page-specs">
+  <div class="container">
+    <div class="section-head">
+      <h1>Pico Neo 2 — Hardware &amp; Software Specs</h1>
+      <span class="count">sourced from teardown &amp; decomp</span>
+    </div>
+    <p class="specs-intro">Reference specs for the Pico Neo 2 headset. Hardware data comes from teardowns and chip identification. Software/runtime info comes from decomp work. Edit via MR in <code>/data/specs/</code>.</p>
+    <div id="specs-container"></div>
+  </div>
+</div>
+
+<!-- ============ PAGE: NEWS LIST ============ -->
+<div class="page" id="page-news">
+  <div class="container">
+    <div class="section-head">
+      <h1>News</h1>
+      <span class="count" id="news-count">0 posts</span>
+    </div>
+    <p class="specs-intro">Updates from the revival effort. New posts are typically from maintainers, but anyone can edit or suggest corrections via MR.</p>
+    <div class="news-list" id="news-list"></div>
+  </div>
+</div>
+
+<!-- ============ PAGE: NEWS DETAIL ============ -->
+<div class="page" id="page-news-detail">
+  <div class="container">
+    <div class="detail-head">
+      <div class="breadcrumb">
+        <a id="news-back">News</a> / <span id="news-detail-breadcrumb"></span>
+      </div>
+      <h1 id="news-detail-title" style="font-family:var(--sans);font-size:24px;"></h1>
+      <div class="detail-meta">
+        <div class="meta-item"><span class="meta-label">Date:</span><span id="news-detail-date" style="font-family:var(--mono);"></span></div>
+        <div class="meta-item"><span class="meta-label">Author:</span><span id="news-detail-author"></span></div>
+      </div>
+      <div class="detail-tags" id="news-detail-tags"></div>
+    </div>
+    <div class="markdown-body" id="news-detail-body"></div>
+  </div>
+</div>
+
+<!-- ============ PAGE: CONTRIBUTE ============ -->
+<div class="page" id="page-contribute">
+  <div class="container">
+    <div class="section-head">
+      <h1>Contribute</h1>
+      <span class="count">no coding required</span>
+    </div>
+    <div class="contribute-content">
+      <h2>How to add or update an entry</h2>
+      <p>Every entry on this site is a markdown file in the <code>/data</code> directory. You don't need to write any code — just edit a text file and open a merge request.</p>
+      <div class="note">
+        You can do everything from the GitLab web interface. No local clone, no terminal, no build tools required.
+      </div>
+      <h3>Steps</h3>
+      <ol>
+        <li>Go to the <code>/data/&lt;category&gt;/</code> folder in the repo (e.g. <code>/data/shims/</code>)</li>
+        <li>Click <strong>New file</strong> (or edit an existing one)</li>
+        <li>Name it descriptively, e.g. <code>openxr-shim.md</code></li>
+        <li>Copy the template below into the file</li>
+        <li>Fill in the frontmatter and write your content in markdown</li>
+        <li>Commit to a new branch and submit the merge request</li>
+        <li>GitLab CI will validate your file — if it passes, it gets merged and the site updates automatically</li>
+      </ol>
+      <h3>File template (entries)</h3>
+      <pre><code>---
+name: openxr-shim
+category: shims
+status: working
+updated: 2026-07-10
+author: calico
+notes: Drops in as libopenxr_loader.so, translates OpenXR 1.0 to native runtime
+tags:
+  - openxr
+  - api-shim
+---
+
+## Overview
+
+A drop-in replacement for libopenxr_loader.so that translates
+OpenXR 1.0 calls to the Pico Neo 2's native XR runtime.
+
+## Installation
+
+1. Download openxr-shim.so from the latest release
+2. Push to device with adb
+3. Set XR_RUNTIME_JSON environment variable
+4. Launch your OpenXR app</code></pre>
+      <h3>File template (news)</h3>
+      <pre><code>---
+date: 2026-07-14
+title: OpenXR shim v0.3 released
+author: calico
+summary: v0.3 brings full OpenXR 1.0 conformance for the core API.
+tags:
+  - shims
+  - release
+---
+
+## What's new
+
+Version 0.3 of the OpenXR shim is out...</code></pre>
+      <h3>File template (specs — table)</h3>
+      <pre><code>---
+section: Hardware
+order: 1
+type: table
+rows:
+  - key: SoC
+    value: Qualcomm Snapdragon 845 (SDM845)
+  - key: RAM
+    value: 6 GB LPDDR4X
+---
+
+Optional freeform notes go here in markdown.</code></pre>
+      <h3>File template (specs — quirks)</h3>
+      <pre><code>---
+section: Known Quirks
+order: 3
+type: quirks
+quirks:
+  - label: Compositor crash on VR mode entry
+    desc: The native compositor segfaults when entering VR mode after a cold boot.
+  - label: Controller 6DOF drift
+    desc: Electromagnetic tracking drifts after ~20 min of continuous use.
+---</code></pre>
+      <h3>Frontmatter fields</h3>
+      <p>The YAML block between the <code>---</code> markers is required. Here's what each field means:</p>
+      <ul>
+        <li><code>name</code> — display name, must match the filename (without <code>.md</code>)</li>
+        <li><code>category</code> — one of: <code>shims</code>, <code>streaming</code>, <code>decomp</code>, <code>projects</code></li>
+        <li><code>status</code> — one of: <code>planned</code>, <code>in-progress</code>, <code>working</code>, <code>broken</code></li>
+        <li><code>updated</code> — date of last meaningful change, format <code>YYYY-MM-DD</code></li>
+        <li><code>author</code> — your username or name</li>
+        <li><code>notes</code> — one-line summary shown in the listing table</li>
+        <li><code>tags</code> — optional list of tags for search/filtering</li>
+      </ul>
+      <p>News files use <code>date</code>, <code>title</code>, <code>author</code>, <code>summary</code>, and optional <code>tags</code> — no <code>status</code> field.</p>
+      <p>Specs files use <code>section</code>, <code>type</code> (<code>table</code> / <code>quirks</code> / <code>freeform</code>), optional <code>order</code>, and either a <code>rows</code> or <code>quirks</code> list depending on <code>type</code>.</p>
+      <h3>Markdown body</h3>
+      <p>Everything below the second <code>---</code> is the entry content. Standard markdown is supported: headings, lists, code blocks, links, tables, and images. This gets rendered on the detail page.</p>
+      <h3>What happens after I submit?</h3>
+      <ol>
+        <li>GitLab CI runs a <code>validate</code> job that checks your frontmatter is correct</li>
+        <li>If it fails, you'll see an error in the MR — fix it and push again</li>
+        <li>Once merged, the <code>build</code> job bundles all markdown files into the site</li>
+        <li>The <code>deploy</code> job publishes to GitLab Pages — usually live within a minute</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="https://gitlab.com/HttpAnimations/neorevived">Source</a> &bull; <a id="footer-contribute">Contribute via MR</a> &bull; No accounts &bull; Built by GitLab CI
+</footer>
+
+<script src="site.bundle.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
