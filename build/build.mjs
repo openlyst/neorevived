@@ -51,8 +51,45 @@ function preprocessAlerts(md) {
   return out.join("\n");
 }
 
-function renderMarkdown(md) {
-  return marked.parse(preprocessAlerts(md || ""));
+function rawToBlob(url) {
+  if (url.includes("/-/raw/")) return url.replace("/-/raw/", "/-/blob/");
+  if (url.includes("raw.githubusercontent.com")) {
+    return url
+      .replace("https://raw.githubusercontent.com/", "https://github.com/")
+      .replace(/^(https:\/\/github\.com\/[^/]+\/[^/]+)\//, "$1/blob/");
+  }
+  if (url.includes("/raw/")) return url.replace("/raw/", "/blob/");
+  return url;
+}
+
+function resolveRelativeLink(href, readmeUrl) {
+  try {
+    var cleanBase = readmeUrl.split("?")[0];
+    var resolved = new URL(href, cleanBase).href;
+    return rawToBlob(resolved);
+  } catch {
+    return href;
+  }
+}
+
+function postProcessLinks(html, readmeUrl) {
+  return html.replace(/<a\s+href="([^"]*)"([^>]*)>/g, function (match, href, rest) {
+    if (rest.includes("target=")) return match;
+    var newHref = href;
+    var extra = "";
+    if (readmeUrl && !/^(https?:|mailto:|#|\/)/.test(href)) {
+      newHref = resolveRelativeLink(href, readmeUrl);
+      extra = ' target="_blank" rel="noopener"';
+    } else if (/^https?:/.test(href)) {
+      extra = ' target="_blank" rel="noopener"';
+    }
+    return '<a href="' + newHref + '"' + rest + extra + '>';
+  });
+}
+
+function renderMarkdown(md, readmeUrl) {
+  var html = marked.parse(preprocessAlerts(md || ""));
+  return postProcessLinks(html, readmeUrl);
 }
 
 async function fetchReadme(url, file) {
@@ -91,7 +128,7 @@ async function buildEntries(files) {
       notes: f.fm.notes,
       downloads: f.fm.downloads === true,
       downloadList: [],
-      bodyHtml: renderMarkdown(readmeMd),
+      bodyHtml: renderMarkdown(readmeMd, f.fm.readme_url),
     };
 
     if (f.fm.downloads === true && Array.isArray(f.fm.download_list)) {
