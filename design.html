@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeoRevived — Design</title>
+<style>
+  :root {
+    --bg: #f8f8f8;
+    --card: #ffffff;
+    --border: #d4d4d4;
+    --border-light: #e8e8e8;
+    --text: #1a1a1a;
+    --text-dim: #555;
+    --text-faint: #888;
+    --link: #0066cc;
+    --link-hover: #004499;
+    --green: #2a7a2a;
+    --orange: #b86500;
+    --red: #b32020;
+    --grey: #777;
+    --header-bg: #1a1a2e;
+    --header-text: #e0e0e0;
+    --accent: #666;
+    --accent-hover: #555;
+    --mono: "DejaVu Sans Mono", "Liberation Mono", "Courier New", monospace;
+    --sans: -apple-system, "Segoe UI", "Liberation Sans", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { color: var(--link-hover); text-decoration: underline; }
+
+  /* === HEADER === */
+  header {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 0 20px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    border-bottom: 2px solid var(--accent);
+  }
+  header .logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+  header .logo span { color: #8888cc; }
+  header nav { display: flex; gap: 4px; flex: 1; }
+  header nav a {
+    color: var(--header-text);
+    padding: 6px 14px;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  header nav a:hover { background: rgba(255,255,255,0.1); text-decoration: none; }
+  header nav a.active { background: var(--accent); color: #fff; }
+  header .search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  header .search input {
+    background: #2a2a4a;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    width: 200px;
+    font-family: var(--sans);
+  }
+  header .search input::placeholder { color: #888; }
+  header .search input:focus { outline: none; border-color: var(--accent); }
+
+  /* === LAYOUT === */
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+  /* === PAGE SECTIONS === */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* === SECTION HEADER === */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head h1 {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .section-head .count {
+    color: var(--text-faint);
+    font-size: 13px;
+  }
+
+  /* === TABLE === */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    background: #f0f0f0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  th:hover { background: #e8e8e8; }
+  th .sort-arrow { font-size: 10px; color: var(--text-faint); margin-left: 4px; }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f6f9fc; }
+  td.name { font-family: var(--mono); font-size: 13px; }
+  td.name a { color: var(--link); }
+  td.updated { color: var(--text-faint); font-size: 13px; white-space: nowrap; }
+  td.notes { color: var(--text-dim); font-size: 13px; max-width: 400px; }
+
+  /* === STATUS LABELS === */
+  .status { font-size: 12px; font-weight: 600; text-transform: capitalize; white-space: nowrap; }
+  .status-working { color: var(--green); }
+  .status-in-progress { color: var(--orange); }
+  .status-broken { color: var(--red); }
+  .status-planned { color: var(--grey); }
+
+  /* === FILTER BAR === */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .filter-bar button {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 5px 14px;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--sans);
+    color: var(--text-dim);
+  }
+  .filter-bar button:hover { border-color: var(--accent); color: var(--text); }
+  .filter-bar button.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  /* === DETAIL PAGE === */
+  .detail-head {
+    margin-bottom: 20px;
+  }
+  .detail-head .breadcrumb {
+    font-size: 13px;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  .detail-head .breadcrumb a { color: var(--link); }
+  .detail-head h1 {
+    font-size: 26px;
+    font-family: var(--mono);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .detail-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .detail-meta .meta-item { display: flex; gap: 6px; }
+  .detail-meta .meta-label { color: var(--text-faint); }
+  .detail-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    background: #eef;
+    border: 1px solid #ccd;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .detail-body {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px 28px;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .detail-body h2 { font-size: 18px; margin: 20px 0 8px; font-weight: 600; }
+  .detail-body h2:first-child { margin-top: 0; }
+  .detail-body h3 { font-size: 15px; margin: 16px 0 6px; font-weight: 600; }
+  .detail-body p { margin-bottom: 12px; }
+  .detail-body ul, .detail-body ol { margin: 0 0 12px 20px; }
+  .detail-body li { margin-bottom: 4px; }
+  .detail-body code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+  .detail-body pre {
+    background: #f0f0f0;
+    border: 1px solid var(--border-light);
+    padding: 12px 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 12px;
+  }
+  .detail-body pre code { background: none; padding: 0; }
+  .detail-body a { color: var(--link); }
+  .detail-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 12px 0;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+  }
+
+  /* === SPECS PAGE === */
+  .specs-intro {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+  .specs-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .specs-section h2 {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 16px;
+    background: #f0f0f0;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+  }
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .specs-table td {
+    padding: 7px 16px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    vertical-align: top;
+  }
+  .specs-table tr:last-child td { border-bottom: none; }
+  .specs-table td.spec-key {
+    width: 200px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+  .specs-table td.spec-val {
+    color: var(--text);
+  }
+  .specs-table td.spec-val code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+  .quirk {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .quirk:last-child { border-bottom: none; }
+  .quirk .quirk-label {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .quirk .quirk-desc {
+    color: var(--text-dim);
+  }
+
+  /* === CONTRIBUTE PAGE === */
+  .contribute-content {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px 28px;
+    line-height: 1.7;
+  }
+  .contribute-content h2 { font-size: 18px; margin: 20px 0 8px; font-weight: 600; }
+  .contribute-content h2:first-child { margin-top: 0; }
+  .contribute-content h3 { font-size: 15px; margin: 16px 0 6px; font-weight: 600; }
+  .contribute-content p { margin-bottom: 12px; }
+  .contribute-content ol { margin: 0 0 12px 20px; }
+  .contribute-content li { margin-bottom: 6px; }
+  .contribute-content code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+  .contribute-content pre {
+    background: #1a1a2e;
+    color: #d0d0d0;
+    border: 1px solid #333;
+    padding: 14px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+  .contribute-content pre code { background: none; color: inherit; padding: 0; }
+  .contribute-content .note {
+    background: #fffde6;
+    border: 1px solid #e0d980;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  /* === FOOTER === */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 16px 20px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 30px;
+  }
+  footer a { color: var(--link); }
+
+  /* === PAGE LABEL (design annotation) === */
+  .page-label {
+    position: sticky;
+    top: 0;
+    background: #ffecb3;
+    border-bottom: 1px solid #e0c060;
+    padding: 4px 20px;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: #665000;
+    text-align: center;
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<!-- Design annotation bar -->
+<div class="page-label">DESIGN PREVIEW — this file shows all pages. Click nav tabs to switch.</div>
+
+<header>
+  <div class="logo">Neo<span>Revived</span></div>
+  <nav>
+    <a class="active" data-page="listing" onclick="showPage('listing')">Shims</a>
+    <a data-page="listing" data-cat="streaming" onclick="showPage('listing','streaming')">Streaming</a>
+    <a data-page="listing" data-cat="decomp" onclick="showPage('listing','decomp')">Decomp</a>
+    <a data-page="listing" data-cat="projects" onclick="showPage('listing','projects')">Projects</a>
+    <a data-page="specs" onclick="showPage('specs')">Specs</a>
+    <a data-page="contribute" onclick="showPage('contribute')">Contribute</a>
+  </nav>
+  <div class="search">
+    <input type="text" placeholder="Search entries..." id="search-input" oninput="filterTable()">
+  </div>
+</header>
+
+<!-- ============ PAGE 1: LISTING ============ -->
+<div class="page active" id="page-listing">
+  <div class="container">
+    <div class="section-head">
+      <h1 id="cat-title">Shims</h1>
+      <span class="count" id="entry-count">0 entries</span>
+    </div>
+
+    <div class="filter-bar">
+      <button class="active" data-status="all" onclick="filterStatus(this)">All</button>
+      <button data-status="working" onclick="filterStatus(this)">Working</button>
+      <button data-status="in-progress" onclick="filterStatus(this)">In Progress</button>
+      <button data-status="broken" onclick="filterStatus(this)">Broken</button>
+      <button data-status="planned" onclick="filterStatus(this)">Planned</button>
+    </div>
+
+    <table id="entry-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Updated</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="entry-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ PAGE 2: DETAIL ============ -->
+<div class="page" id="page-detail">
+  <div class="container">
+    <div class="detail-head">
+      <div class="breadcrumb">
+        <a onclick="showPage('listing','shims')">Shims</a> / <span id="detail-breadcrumb-name">openxr-shim</span>
+      </div>
+      <h1 id="detail-title">openxr-shim</h1>
+      <div class="detail-meta">
+        <div class="meta-item"><span class="meta-label">Status:</span><span class="status status-working" id="detail-status">working</span></div>
+        <div class="meta-item"><span class="meta-label">Updated:</span><span id="detail-updated">2026-07-10</span></div>
+        <div class="meta-item"><span class="meta-label">Author:</span><span id="detail-author">calico</span></div>
+      </div>
+      <div class="detail-tags" id="detail-tags">
+        <span class="tag">openxr</span>
+        <span class="tag">api-shim</span>
+        <span class="tag">native</span>
+      </div>
+    </div>
+    <div class="detail-body" id="detail-body">
+      <h2>Overview</h2>
+      <p>A drop-in replacement for <code>libopenxr_loader.so</code> that translates OpenXR 1.0 calls to the Pico Neo 2's native XR runtime. Lets modern OpenXR-based apps run without modification.</p>
+      <img src="https://placehold.co/600x200/1a1a2e/cccccc?text=openxr-shim+architecture" alt="openxr-shim architecture diagram">
+
+      <h2>Installation</h2>
+      <ol>
+        <li>Download <code>openxr-shim.so</code> from the latest release</li>
+        <li>Push to device: <code>adb push openxr-shim.so /data/local/tmp/libopenxr_loader.so</code></li>
+        <li>Set <code>XR_RUNTIME_JSON</code> to point at the bundled active_runtime.json</li>
+        <li>Launch your OpenXR app — it should pick up the shim automatically</li>
+      </ol>
+
+      <h2>Known Issues</h2>
+      <ul>
+        <li>Hand tracking extension (<code>XR_EXT_hand_tracking</code>) not yet implemented</li>
+        <li>Performance overhead is ~2ms per frame on heavy scenes</li>
+        <li>Does not work with apps that statically link the OpenXR loader</li>
+      </ul>
+
+      <h2>Source</h2>
+      <p>Repository: <a href="#">gitlab.example/openxr-shim</a></p>
+      <p>License: MIT</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE 3: SPECS ============ -->
+<div class="page" id="page-specs">
+  <div class="container">
+    <div class="section-head">
+      <h1>Pico Neo 2 — Hardware &amp; Software Specs</h1>
+      <span class="count">sourced from teardown &amp; decomp</span>
+    </div>
+    <p class="specs-intro">Reference specs for the Pico Neo 2 headset. Hardware data comes from teardowns and chip identification. Software/runtime info comes from decomp work. Edit via MR in <code>/data/specs/</code>.</p>
+
+    <!-- Hardware -->
+    <div class="specs-section">
+      <h2>Hardware</h2>
+      <table class="specs-table">
+        <tr><td class="spec-key">SoC</td><td class="spec-val">Qualcomm Snapdragon 845 (SDM845)</td></tr>
+        <tr><td class="spec-key">CPU</td><td class="spec-val">8x Kryo 385 (4x 2.8 GHz Gold + 4x 1.8 GHz Silver), ARMv8-A 64-bit</td></tr>
+        <tr><td class="spec-key">GPU</td><td class="spec-val">Adreno 640</td></tr>
+        <tr><td class="spec-key">RAM</td><td class="spec-val">6 GB LPDDR4X</td></tr>
+        <tr><td class="spec-key">Storage</td><td class="spec-val">128 GB UFS 2.1</td></tr>
+        <tr><td class="spec-key">Display</td><td class="spec-val">Dual 3.5" LCD, 1832 x 1920 per eye, 90 Hz refresh</td></tr>
+        <tr><td class="spec-key">FOV</td><td class="spec-val">~101 degrees diagonal</td></tr>
+        <tr><td class="spec-key">IPD</td><td class="spec-val">Mechanical adjustment, 58-72 mm range</td></tr>
+        <tr><td class="spec-key">Tracking</td><td class="spec-val">6DOF inside-out, 4x fisheye cameras on headset front</td></tr>
+        <tr><td class="spec-key">Controllers</td><td class="spec-val">6DOF, 3DOF fallback mode, electromagnetic tracking</td></tr>
+        <tr><td class="spec-key">Battery</td><td class="spec-val">5300 mAh, rear-mounted, ~2.5 hr typical use</td></tr>
+        <tr><td class="spec-key">Weight</td><td class="spec-val">~560 g (headset only, no strap)</td></tr>
+        <tr><td class="spec-key">Connectivity</td><td class="spec-val">Wi-Fi 5 (802.11ac 2x2), Bluetooth 5.0, USB-C 3.1</td></tr>
+        <tr><td class="spec-key">Sensors</td><td class="spec-val">IMU (BMI055), proximity sensor, ambient light sensor</td></tr>
+        <tr><td class="spec-key">Audio</td><td class="spec-val">Built-in speakers (temporal), 3.5mm jack, USB-C audio</td></tr>
+      </table>
+    </div>
+
+    <!-- Software / OS -->
+    <div class="specs-section">
+      <h2>Software &amp; OS</h2>
+      <table class="specs-table">
+        <tr><td class="spec-key">OS</td><td class="spec-val">Pico OS (Android-based, AOSP fork)</td></tr>
+        <tr><td class="spec-key">Android base</td><td class="spec-val">Android 8.1 (Oreo, API 27) — heavily modified</td></tr>
+        <tr><td class="spec-key">Kernel</td><td class="spec-val">Linux 4.9, Qualcomm vendor branch <code>sdm845-4.9</code></td></tr>
+        <tr><td class="spec-key">Last official update</td><td class="spec-val">Pico OS 3.x (early 2021), EOL since</td></tr>
+        <tr><td class="spec-key">Runtime</td><td class="spec-val">Pico Native SDK (C/C++), proprietary XR runtime via <code>libpico_xr.so</code></td></tr>
+        <tr><td class="spec-key">OpenXR</td><td class="spec-val">Not supported natively — requires shim (see Shims tab)</td></tr>
+        <tr><td class="spec-key">OpenGL ES</td><td class="spec-val">3.2</td></tr>
+        <tr><td class="spec-key">Vulkan</td><td class="spec-val">1.1 (Adreno driver, buggy on some paths)</td></tr>
+        <tr><td class="spec-key">App distribution</td><td class="spec-val">Pico Store (defunct), sideload via APK, no Play Store</td></tr>
+        <tr><td class="spec-key">USB modes</td><td class="spec-val">ADB, MTP, USB tethering</td></tr>
+        <tr><td class="spec-key">Bootloader</td><td class="spec-val">Locked by default, unlockable via fastboot <code>oem unlock</code></td></tr>
+      </table>
+    </div>
+
+    <!-- Quirks -->
+    <div class="specs-section">
+      <h2>Known Quirks</h2>
+      <div class="quirk">
+        <div class="quirk-label">Compositor crash on VR mode entry</div>
+        <div class="quirk-desc">The native compositor segfaults when entering VR mode after a cold boot on some units. Warm reboot fixes it. Tracked in decomp/pico-runtime.</div>
+      </div>
+      <div class="quirk">
+        <div class="quirk-label">Controller 6DOF drift</div>
+        <div class="quirk-desc">Electromagnetic tracking drifts after ~20 min of continuous use. Recalibration requires holding controllers together for 3 seconds.</div>
+      </div>
+      <div class="quirk">
+        <div class="quirk-label">Wi-Fi 5GHz channel lock</div>
+        <div class="quirk-desc">Driver only supports channels 36-48 on 5GHz. Channels 149-165 (used in US streaming setups) are unavailable despite hardware support.</div>
+      </div>
+      <div class="quirk">
+        <div class="quirk-label">USB-C display output disabled</div>
+        <div class="quirk-desc">DisplayPort alt-mode is disabled in kernel config. Hardware supports it but no driver path exists. Would need custom kernel to enable.</div>
+      </div>
+      <div class="quirk">
+        <div class="quirk-label">Pico Store servers offline</div>
+        <div class="quirk-desc">Pico Store backend went offline after the Quest acquisition. App downloads fail. All app installs must be sideloaded via APK.</div>
+      </div>
+      <div class="quirk">
+        <div class="quirk-label">No foveated rendering API</div>
+        <div class="quirk-desc">The XR runtime exposes no fixed foveated rendering extension. Performance-heavy apps must do full-resolution render, limiting frame rate.</div>
+      </div>
+      <div class="quirk">
+        <div class="quirk-label">Battery reporting inaccuracy</div>
+        <div class="quirk-desc">Reported percentage jumps from ~40% to ~15% suddenly. Charge controller calibration issue. See projects/battery-research.</div>
+      </div>
+    </div>
+
+    <!-- Runtime details -->
+    <div class="specs-section">
+      <h2>Runtime &amp; SDK Details</h2>
+      <table class="specs-table">
+        <tr><td class="spec-key">Native SDK</td><td class="spec-val">Pico Native SDK 2.x (C/C++), links against <code>libpico_xr.so</code></td></tr>
+        <tr><td class="spec-key">SDK version (last)</td><td class="spec-val">2.1.3 (2021-01)</td></tr>
+        <tr><td class="spec-key">Rendering backends</td><td class="spec-val">OpenGL ES 2.0/3.0/3.2, Vulkan 1.1 (partial)</td></tr>
+        <tr><td class="spec-key">Tracking API</td><td class="spec-val">Proprietary <code>Pxr_GetTrackingState()</code>, 6DOF head + controllers</td></tr>
+        <tr><td class="spec-key">Boundary system</td><td class="spec-val">Stationary + guardian-style boundary, stored in <code>/data/pico/boundary/</code></td></tr>
+        <tr><td class="spec-key">Overlay support</td><td class="spec-val">Limited — single overlay layer, no composited multi-overlay</td></tr>
+        <tr><td class="spec-key">Hand tracking</td><td class="spec-val">Not available in stock runtime. Community shim in progress.</td></tr>
+        <tr><td class="spec-key">Reprojection</td><td class="spec-val">None (no ASW/ATW equivalent). App must hit 90fps or stutter.</td></tr>
+        <tr><td class="spec-key">System services</td><td class="spec-val"><code>pico_system_service</code>, <code>pico_input_service</code>, <code>pico_compositor</code> — see Decomp tab</td></tr>
+      </table>
+    </div>
+
+    <!-- Sources -->
+    <div class="specs-section">
+      <h2>Sources</h2>
+      <table class="specs-table">
+        <tr><td class="spec-key">Teardown</td><td class="spec-val">See projects/teardown-notes for board photos and chip IDs</td></tr>
+        <tr><td class="spec-key">Decomp</td><td class="spec-val">See decomp/pico-runtime, decomp/input-service, decomp/compositor</td></tr>
+        <tr><td class="spec-key">Official docs</td><td class="spec-val">Pico developer portal (archived, partially offline)</td></tr>
+        <tr><td class="spec-key">Community</td><td class="spec-val">Contributed via MR — add corrections in <code>/data/specs/</code></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE 4: CONTRIBUTE ============ -->
+<div class="page" id="page-contribute">
+  <div class="container">
+    <div class="section-head">
+      <h1>Contribute</h1>
+      <span class="count">no coding required</span>
+    </div>
+
+    <div class="contribute-content">
+      <h2>How to add or update an entry</h2>
+      <p>Every entry on this site is a markdown file in the <code>/data</code> directory. You don't need to write any code — just edit a text file and open a merge request.</p>
+
+      <div class="note">
+        You can do everything from the GitLab web interface. No local clone, no terminal, no build tools required.
+      </div>
+
+      <h3>Steps</h3>
+      <ol>
+        <li>Go to the <code>/data/&lt;category&gt;/</code> folder in the repo (e.g. <code>/data/shims/</code>)</li>
+        <li>Click <strong>New file</strong> (or edit an existing one)</li>
+        <li>Name it descriptively, e.g. <code>openxr-shim.md</code></li>
+        <li>Copy the template below into the file</li>
+        <li>Fill in the frontmatter and write your content in markdown</li>
+        <li>Commit to a new branch and submit the merge request</li>
+        <li>GitLab CI will validate your file — if it passes, it gets merged and the site updates automatically</li>
+      </ol>
+
+      <h3>File template</h3>
+      <pre><code>---
+name: openxr-shim
+category: shims
+status: working
+updated: 2026-07-10
+author: calico
+tags:
+  - openxr
+  - api-shim
+  - native
+---
+
+## Overview
+
+A drop-in replacement for libopenxr_loader.so that translates
+OpenXR 1.0 calls to the Pico Neo 2's native XR runtime.
+
+## Installation
+
+1. Download openxr-shim.so from the latest release
+2. Push to device with adb
+3. Set XR_RUNTIME_JSON environment variable
+4. Launch your OpenXR app
+
+## Known Issues
+
+- Hand tracking not implemented
+- ~2ms overhead per frame</code></pre>
+
+      <h3>Frontmatter fields</h3>
+      <p>The YAML block between the <code>---</code> markers is required. Here's what each field means:</p>
+      <ul>
+        <li><code>name</code> — display name, must match the filename (without <code>.md</code>)</li>
+        <li><code>category</code> — one of: <code>shims</code>, <code>streaming</code>, <code>decomp</code>, <code>projects</code>, <code>specs</code></li>
+        <li><code>status</code> — one of: <code>planned</code>, <code>in-progress</code>, <code>working</code>, <code>broken</code></li>
+        <li><code>updated</code> — date of last meaningful change, format <code>YYYY-MM-DD</code></li>
+        <li><code>author</code> — your username or name</li>
+        <li><code>tags</code> — optional list of tags for search/filtering</li>
+      </ul>
+
+      <h3>Markdown body</h3>
+      <p>Everything below the second <code>---</code> is the entry content. Standard markdown is supported: headings, lists, code blocks, links, tables, and images. Images can be referenced via URL or placed in the <code>/data/&lt;category&gt;/images/</code> folder next to the markdown file. This gets rendered on the detail page.</p>
+
+      <h3>What happens after I submit?</h3>
+      <ol>
+        <li>GitLab CI runs a <code>validate</code> job that checks your frontmatter is correct</li>
+        <li>If it fails, you'll see an error in the MR — fix it and push again</li>
+        <li>Once merged, the <code>build</code> job bundles all markdown files into the site</li>
+        <li>The <code>deploy</code> job publishes to GitLab Pages — usually live within a minute</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="#">Source</a> &bull; <a onclick="showPage('contribute')">Contribute via MR</a> &bull; No accounts &bull; Built by GitLab CI
+</footer>
+
+<script>
+// === SAMPLE DATA (would be inlined from /data at build time) ===
+const entries = [
+  // shims
+  {name:"openxr-shim",category:"shims",status:"working",updated:"2026-07-10",notes:"Drops in as libopenxr_loader.so, translates OpenXR 1.0 to native runtime"},
+  {name:"androidx-shim",category:"shims",status:"in-progress",updated:"2026-07-08",notes:"Backports AndroidX bindings for apps targeting newer SDKs"},
+  {name:"vulkan-compat",category:"shims",status:"broken",updated:"2026-06-29",notes:"Vulkan 1.1 layer crashes on swapchain creation, see issue #7"},
+  {name:"google-play-services",category:"shims",status:"planned",updated:"2026-06-15",notes:"Stub GMS for apps that refuse to launch without it"},
+
+  // streaming
+  {name:"alvr",category:"streaming",status:"in-progress",updated:"2026-07-12",notes:"Latency over 5GHz WiFi still rough, color compression artifacts"},
+  {name:"virtual-desktop",category:"streaming",status:"broken",updated:"2026-07-05",notes:"Server side refuses connection from unknown device ID"},
+  {name:"steamlink",category:"streaming",status:"planned",updated:"2026-07-01",notes:"Waiting on reverse-engineering of the streaming handshake"},
+  {name:"wi gig dongle",category:"streaming",status:"working",updated:"2026-07-11",notes:"Works with modified driver, ~15ms latency on line-of-sight"},
+
+  // decomp
+  {name:"pico-runtime",category:"decomp",status:"broken",updated:"2026-07-08",notes:"SIGSEGV in compositor when entering VR mode, see issue #14"},
+  {name:"package-svc",category:"decomp",status:"in-progress",updated:"2026-07-09",notes:"Package manager service partially documented, install flow mapped"},
+  {name:"system-server",category:"decomp",status:"in-progress",updated:"2026-07-07",notes:"Boot sequence traced, working on service dependency graph"},
+  {name:"input-service",category:"decomp",status:"working",updated:"2026-07-13",notes:"Controller input fully reversed, 6DOF tracking understood"},
+  {name:"compositor",category:"decomp",status:"planned",updated:"2026-06-20",notes:"Not started, highest priority after runtime"},
+
+  // projects
+  {name:"sidequest-port",category:"projects",status:"planned",updated:"2026-07-01",notes:"Waiting on decomp of package svc to understand install hooks"},
+  {name:"custom-rom",category:"projects",status:"in-progress",updated:"2026-07-06",notes:"AOSP 12 base boots, sensors and display init working"},
+  {name:"linux-on-pico",category:"projects",status:"in-progress",updated:"2026-07-10",notes:"Mainline kernel posts to init, no display/GPU yet"},
+  {name:"battery-research",category:"projects",status:"working",updated:"2026-07-14",notes:"Documented charge controller, replacement cells sourced"},
+  {name:"teardown-notes",category:"projects",status:"working",updated:"2026-06-25",notes:"Full board photos, chip IDs, connector pinouts documented"},
+];
+
+let currentCategory = "shims";
+let currentStatusFilter = "all";
+let currentSearchQuery = "";
+
+function renderTable() {
+  const tbody = document.getElementById("entry-tbody");
+  let filtered = entries.filter(e => e.category === currentCategory);
+
+  if (currentStatusFilter !== "all") {
+    filtered = filtered.filter(e => e.status === currentStatusFilter);
+  }
+  if (currentSearchQuery) {
+    const q = currentSearchQuery.toLowerCase();
+    filtered = filtered.filter(e =>
+      e.name.toLowerCase().includes(q) ||
+      e.notes.toLowerCase().includes(q) ||
+      e.status.toLowerCase().includes(q)
+    );
+  }
+
+  document.getElementById("entry-count").textContent = filtered.length + " entries";
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-faint);padding:24px;">No entries match your filter.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(e => `
+    <tr onclick="showDetail('${e.name}','${e.category}','${e.status}','${e.updated}')" style="cursor:pointer">
+      <td class="name"><a>${e.name}</a></td>
+      <td><span class="status status-${e.status}">${e.status}</span></td>
+      <td class="updated">${e.updated}</td>
+      <td class="notes">${e.notes}</td>
+    </tr>
+  `).join("");
+}
+
+function filterTable() {
+  currentSearchQuery = document.getElementById("search-input").value;
+  renderTable();
+}
+
+function filterStatus(btn) {
+  document.querySelectorAll(".filter-bar button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentStatusFilter = btn.dataset.status;
+  renderTable();
+}
+
+function showPage(page, cat) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll("header nav a").forEach(a => a.classList.remove("active"));
+
+  if (page === "listing") {
+    document.getElementById("page-listing").classList.add("active");
+    if (cat) {
+      currentCategory = cat;
+      document.getElementById("cat-title").textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+    }
+    // highlight the right nav tab
+    const navTarget = cat || currentCategory;
+    document.querySelectorAll("header nav a").forEach(a => {
+      if (a.dataset.cat === navTarget) a.classList.add("active");
+    });
+    // reset filters
+    currentStatusFilter = "all";
+    currentSearchQuery = "";
+    document.getElementById("search-input").value = "";
+    document.querySelectorAll(".filter-bar button").forEach(b => {
+      b.classList.toggle("active", b.dataset.status === "all");
+    });
+    renderTable();
+  } else if (page === "detail") {
+    document.getElementById("page-detail").classList.add("active");
+  } else if (page === "specs") {
+    document.getElementById("page-specs").classList.add("active");
+    document.querySelectorAll("header nav a").forEach(a => {
+      if (a.dataset.page === "specs") a.classList.add("active");
+    });
+  } else if (page === "contribute") {
+    document.getElementById("page-contribute").classList.add("active");
+    document.querySelectorAll("header nav a").forEach(a => {
+      if (a.dataset.page === "contribute") a.classList.add("active");
+    });
+  }
+}
+
+function showDetail(name, category, status, updated) {
+  showPage("detail");
+  document.getElementById("detail-title").textContent = name;
+  document.getElementById("detail-breadcrumb-name").textContent = name;
+  const statusEl = document.getElementById("detail-status");
+  statusEl.textContent = status;
+  statusEl.className = "status status-" + status;
+  document.getElementById("detail-updated").textContent = updated;
+}
+
+// initial render
+renderTable();
+</script>
+
+</body>
+</html>
