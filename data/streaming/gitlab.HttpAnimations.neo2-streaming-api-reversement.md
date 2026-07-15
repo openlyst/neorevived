@@ -1,7 +1,7 @@
 ---
 name: gitlab.HttpAnimations.neo2-streaming-api-reversement
 humanname: Pico Neo 2 <-> Monado Bridge
-category: projects
+category: streaming
 status: in-progress
 updated: 2026-07-15
 author: HttpAnimations
