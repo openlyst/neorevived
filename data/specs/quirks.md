@@ -20,7 +20,7 @@ quirks:
   - label: Eye tracking hardware absent
     desc: Runtime supports eye tracking APIs (<code>xrGetEyeTrackingDataPICO</code>) and Tobii calibration packages are installed, but <code>pxr.vendorhw.eye=0</code> indicates no eye tracking hardware on this unit.
   - label: Bootloader unlocked
-    desc: This unit has an unlocked bootloader (<code>ro.boot.flash.locked=0</code>, <code>ro.boot.verifiedbootstate=orange</code>) with test-keys build. Security implications for app compatibility.
+    desc: Bootloader is locked by default but can be unlocked.
   - label: Stale security patch
     desc: Security patch level is 2019-01-05, over 7 years behind. No further updates expected (EOL device).
 ---
