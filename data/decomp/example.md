@@ -1,0 +1,18 @@
+---
+name: example
+category: decomp
+status: planned
+updated: 2026-01-01
+author: your-name
+notes: This is an example entry. Copy this file, rename it, and fill in your own content.
+tags:
+  - example
+---
+
+## Overview
+
+Describe what this decomp effort covers.
+
+## Progress
+
+- Bullet points for current progress

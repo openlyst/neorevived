@@ -20,6 +20,7 @@ export function readDataFiles() {
 
     for (const name of fs.readdirSync(catDir)) {
       if (!name.endsWith(".md")) continue;
+      if (name === "example.md") continue;
       const abs = path.join(catDir, name);
       if (!fs.statSync(abs).isFile()) continue;
 

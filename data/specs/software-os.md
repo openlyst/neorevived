@@ -16,7 +16,7 @@ rows:
   - key: Build fingerprint
     value: <code>Pico/A7B10/PICOA7B10:8.1.0/OPM1.171019.026/eng.scmbui.20210409.201441:user/test-keys</code>
   - key: Security patch
-    value: 2019-01-05
+    value: "2019-01-05"
   - key: Runtime
     value: Pico OpenXR runtime via <code>libruntime.pxr.so</code> (Monado-based), native VR via <code>libpvr.so</code>
   - key: OpenXR
