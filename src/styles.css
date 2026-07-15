@@ -259,6 +259,11 @@ td.notes { color: var(--text-dim); font-size: 13px; max-width: 400px; }
   background: #f0f0f0;
   color: var(--text-dim);
 }
+.download-tracking {
+  background: #f5f5f5;
+  color: var(--text-faint);
+  border: 1px dashed var(--border);
+}
 .download-notes {
   font-size: 13px;
   color: var(--text-dim);

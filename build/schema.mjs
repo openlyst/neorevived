@@ -86,19 +86,27 @@ export function validateEntry(file, fm, expectedCategory, baseName) {
         throw fail(file, "each download entry must be an object");
       }
       requireString(file, d, "version");
-      requireString(file, d, "url");
       requireDate(file, d, "date");
       if (d.notes !== undefined && typeof d.notes !== "string") {
         throw fail(file, 'download "notes" must be a string');
       }
-      if (d.commit === undefined || d.commit === "") {
-        throw fail(file, 'download "commit" is required — versions must be locked to a commit');
+      const hasUrl = d.url !== undefined && d.url !== "";
+      const hasCommit = d.commit !== undefined && d.commit !== "";
+      if (hasUrl !== hasCommit) {
+        throw fail(file, 'download entries must have both "url" and "commit", or neither (version-tracking only)');
       }
-      if (typeof d.commit !== "string") {
-        throw fail(file, 'download "commit" must be a string (hash or URL)');
+      if (hasUrl) {
+        if (typeof d.url !== "string") {
+          throw fail(file, 'download "url" must be a string');
+        }
       }
-      if (!COMMIT_HASH_RE.test(d.commit) && !d.commit.startsWith("http")) {
-        throw fail(file, `download "commit" must be a git hash or a full URL, got "${d.commit}"`);
+      if (hasCommit) {
+        if (typeof d.commit !== "string") {
+          throw fail(file, 'download "commit" must be a string (hash or URL)');
+        }
+        if (!COMMIT_HASH_RE.test(d.commit) && !d.commit.startsWith("http")) {
+          throw fail(file, `download "commit" must be a git hash or a full URL, got "${d.commit}"`);
+        }
       }
     }
   }

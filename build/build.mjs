@@ -99,18 +99,22 @@ async function buildEntries(files) {
       const isGitLab = sourceUrl.includes("gitlab.com");
       const commitPath = isGitLab ? "/-/commit/" : "/commit/";
       entry.downloadList = f.fm.download_list.map((d) => {
-        let commitUrl = d.commit;
-        if (COMMIT_HASH_RE.test(d.commit)) {
+        const hasCommit = d.commit && COMMIT_HASH_RE.test(d.commit);
+        let commitUrl = d.commit || "";
+        if (hasCommit) {
           commitUrl = sourceUrl + commitPath + d.commit;
+        } else if (d.commit && d.commit.startsWith("http")) {
+          commitUrl = d.commit;
         }
         return {
           version: d.version,
-          url: d.url,
+          url: d.url || "",
           date: d.date,
           notes: d.notes || "",
-          commit: d.commit,
+          commit: d.commit || "",
           commitUrl,
-          isRawFile: RAW_FILE_RE.test(d.url),
+          isRawFile: d.url ? RAW_FILE_RE.test(d.url) : false,
+          isTrackingOnly: !d.url && !d.commit,
         };
       }).sort((a, b) => b.date.localeCompare(a.date));
     }

@@ -295,10 +295,17 @@
         head.appendChild(version);
         head.appendChild(el("span", "download-date", d.date));
 
-        var typeLabel = d.isRawFile
-          ? "Direct download"
-          : "External link";
-        var typeEl = el("span", "download-type " + (d.isRawFile ? "download-raw" : "download-offsite"), typeLabel);
+        var typeLabel = d.isTrackingOnly
+          ? "Version tracking only"
+          : d.isRawFile
+            ? "Direct download"
+            : "External link";
+        var typeClass = d.isTrackingOnly
+          ? "download-tracking"
+          : d.isRawFile
+            ? "download-raw"
+            : "download-offsite";
+        var typeEl = el("span", "download-type " + typeClass, typeLabel);
         head.appendChild(typeEl);
 
         item.appendChild(head);
@@ -307,20 +314,22 @@
           item.appendChild(el("div", "download-notes", d.notes));
         }
 
-        var links = el("div", "download-links");
-        var dlLink = el("a", "download-link", d.isRawFile ? "Download" : "Open page");
-        dlLink.href = d.url;
-        dlLink.target = "_blank";
-        dlLink.rel = "noopener";
-        links.appendChild(dlLink);
+        if (!d.isTrackingOnly) {
+          var links = el("div", "download-links");
+          var dlLink = el("a", "download-link", d.isRawFile ? "Download" : "Open page");
+          dlLink.href = d.url;
+          dlLink.target = "_blank";
+          dlLink.rel = "noopener";
+          links.appendChild(dlLink);
 
-        var commitLink = el("a", "download-commit", "Commit: " + d.commit.substring(0, 12));
-        commitLink.href = d.commitUrl;
-        commitLink.target = "_blank";
-        commitLink.rel = "noopener";
-        links.appendChild(commitLink);
+          var commitLink = el("a", "download-commit", "Commit: " + d.commit.substring(0, 12));
+          commitLink.href = d.commitUrl;
+          commitLink.target = "_blank";
+          commitLink.rel = "noopener";
+          links.appendChild(commitLink);
 
-        item.appendChild(links);
+          item.appendChild(links);
+        }
         dlSection.appendChild(item);
       });
 
