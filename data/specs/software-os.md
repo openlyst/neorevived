@@ -20,7 +20,7 @@ rows:
   - key: Runtime
     value: Pico OpenXR runtime via <code>libruntime.pxr.so</code> (Monado-based), native VR via <code>libpvr.so</code>
   - key: OpenXR
-    value: Supported natively — active runtime at <code>/vendor/etc/openxr/1/active_runtime.json</code>, library <code>libruntime.pxr.so</code>
+    value: Supported natively, active runtime at <code>/vendor/etc/openxr/1/active_runtime.json</code>, library <code>libruntime.pxr.so</code>
   - key: OpenGL ES
     value: "3.2 (<code>ro.opengles.version=196610</code>)"
   - key: Vulkan

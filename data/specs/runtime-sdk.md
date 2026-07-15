@@ -18,13 +18,13 @@ rows:
   - key: Tracking API
     value: OpenXR <code>xrLocateViews</code> / <code>xrLocateSpace</code>, plus PICO-specific <code>xrSetTrackingModePICO</code>. 6DOF head + controllers
   - key: Boundary system
-    value: <code>xrGetBoundaryGeometryPICO</code>, <code>xrBoundaryTestPointPICO</code>, <code>xrBoundaryTestNodePICO</code>, <code>xrGetBoundaryDimensionsPICO</code> — storage path unknown
+    value: <code>xrGetBoundaryGeometryPICO</code>, <code>xrBoundaryTestPointPICO</code>, <code>xrBoundaryTestNodePICO</code>, <code>xrGetBoundaryDimensionsPICO</code>, storage path unknown
   - key: Overlay support
     value: Supported via <code>XR_EXTX_overlay</code> extension, compositor overlay layers in <code>libcompositor.pxr.so</code>
   - key: Hand tracking
     value: Supported via <code>XR_EXT_hand_tracking</code> extension (runtime checks for it at runtime)
   - key: Eye tracking
-    value: Runtime supports <code>xrGetEyeTrackingDataPICO</code> and <code>xrGetEyeTrackingAutoIPDPICO</code>, but <code>pxr.vendorhw.eye=0</code> — hardware not present on this unit
+    value: Runtime supports <code>xrGetEyeTrackingDataPICO</code> and <code>xrGetEyeTrackingAutoIPDPICO</code>, but <code>pxr.vendorhw.eye=0</code>, hardware not present on this unit
   - key: Foveated rendering
     value: Fixed foveated rendering (FFR) supported via <code>xrGetFoveationConfigPICO</code> / <code>pxr_set_ffr_info</code>
   - key: Reprojection

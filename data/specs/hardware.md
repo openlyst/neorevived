@@ -18,13 +18,13 @@ rows:
   - key: FOV
     value: Unknown
   - key: IPD
-    value: Software settable — runtime exposes <code>xrGetIPDPICO</code> / <code>xrSetIPDPICO</code>
+    value: Software settable, runtime exposes <code>xrGetIPDPICO</code> / <code>xrSetIPDPICO</code>
   - key: Tracking
     value: 6DOF inside-out, computer vision based (<code>ro.pvr.controller.service=cv</code>), <code>persist.pvr.global_6dof=true</code>
   - key: Controllers
     value: 6DOF via CV tracking, 3DOF fallback mode (<code>pvr.running.app.3dof</code> flag present)
   - key: Battery
-    value: Li-ion, measured full charge ~4050 mAh (<code>charge_full=4050000</code> µAh) — design capacity unknown
+    value: Li-ion, measured full charge ~4050 mAh (<code>charge_full=4050000</code> µAh), design capacity unknown
   - key: Weight
     value: Unknown
   - key: Connectivity
@@ -34,5 +34,5 @@ rows:
   - key: Audio
     value: Built-in speakers (Qualcomm fluence audio), 3.5mm jack, USB-C audio
   - key: Eye tracking
-    value: Tobii calibration packages present (<code>com.tobii.usercalibration.pico</code>, <code>com.pvr.tobservice</code> v2.1.3), but <code>pxr.vendorhw.eye=0</code> — hardware not available at time of testing
+    value: Tobii calibration packages present (<code>com.tobii.usercalibration.pico</code>, <code>com.pvr.tobservice</code> v2.1.3), but <code>pxr.vendorhw.eye=0</code>, hardware not available at time of testing
 ---
