@@ -45,12 +45,15 @@ const server = http.createServer((req, res) => {
   const filePath = path.join(PUBLIC_DIR, urlPath);
   if (!filePath.startsWith(PUBLIC_DIR) || !fs.existsSync(filePath)) {
     res.writeHead(404);
-    res.end("Not found");
+    res.end("Not Found");
     return;
   }
 
   const ext = path.extname(filePath);
-  res.writeHead(200, { "Content-Type": MIME[ext] || "application/octet-stream" });
+  res.writeHead(200, {
+    "Content-Type": MIME[ext] || "application/octet-stream",
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+  });
   fs.createReadStream(filePath).pipe(res);
 });
 
