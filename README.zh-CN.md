@@ -30,6 +30,7 @@
 
 ```bash
 npm install
+npm run dev        # 在 localhost:3000 启动开发服务器，数据变更时自动重建
 npm run build      # 构建静态站点到 public/
 npm run validate   # 仅验证前置元数据，不构建
 npm run clean      # 删除 public/

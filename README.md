@@ -30,6 +30,7 @@ The `example.md` files are templates and are skipped by the build.
 
 ```bash
 npm install
+npm run dev        # serves site at localhost:3000, rebuilds on data changes
 npm run build      # builds static site into public/
 npm run validate   # validates frontmatter without building
 npm run clean      # removes public/

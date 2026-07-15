@@ -7,6 +7,7 @@
   "scripts": {
     "validate": "node build/validate.mjs",
     "build": "node build/build.mjs",
+    "dev": "node build/dev.mjs",
     "clean": "rm -rf public"
   },
   "engines": {
