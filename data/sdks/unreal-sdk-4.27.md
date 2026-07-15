@@ -130,6 +130,44 @@ The core HMD device implementation. Extends `IStereoRenderingDevice`. Handles:
 
 #### `PXR_HMDFunctionLibrary` (`PXR_HMDFunctionLibrary.cpp`)
 Blueprint-callable function library exposing Pico-specific functions to UE4 Blueprints and C++:
+
+```cpp
+// Get HMD device info
+FPXRHMDInfo hmdInfo;
+UPXR_HMDFunctionLibrary::PXR_GetHMDInfo(hmdInfo);
+
+// Get controller state for left controller
+FPXRControllerInfo controllerInfo;
+UPXR_HMDFunctionLibrary::PXR_GetControllerInfo(0, controllerInfo);
+
+// Set FFR level
+UPXR_HMDFunctionLibrary::PXR_SetFFRLevel(EPXRFoveationLevel::High);
+
+// Get eye tracking data
+FPXREyeTrackingData eyeData;
+UPXR_HMDFunctionLibrary::PXR_GetEyeTrackingData(eyeData);
+if (eyeData.bIsGazeValid) {
+    FVector gazePoint = eyeData.CombinedGazePoint;
+}
+
+// Boundary test for head node
+FPXRBoundaryTestResult result;
+UPXR_HMDFunctionLibrary::PXR_BoundaryTestNode(EPXRBoundaryNode::Head, EPXRBoundaryType::OuterBoundary, result);
+if (result.bIsTriggering) {
+    // Head is too close to boundary
+}
+
+// Start see-through camera
+UPXR_HMDFunctionLibrary::PXR_SeeThroughCameraStart();
+
+// Set tracking origin to floor level
+UPXR_HMDFunctionLibrary::PXR_SetTrackingOrigin(EPXRTrackingOrigin::FloorLevel);
+
+// Reset sensor (full recenter)
+UPXR_HMDFunctionLibrary::PXR_ResetSensor();
+```
+
+Blueprint equivalent:
 - `PXR_GetHMDInfo` — Get HMD device info
 - `PXR_GetControllerInfo` — Get controller state
 - `PXR_SetFFRLevel` — Set foveated rendering level
@@ -189,6 +227,43 @@ Implements UE4's `IOnlineSubsystem` interface for Pico platform services. Provid
 ### `OnlinePicoFunctionLibrary` (74 KB header)
 The main Blueprint function library. Exposes all platform APIs as static C++ functions callable from Blueprints. Key function groups:
 
+```cpp
+// User login
+UPOnlinePicoFunctionLibrary::Login();
+
+// Get logged-in user info
+FPXRUserInfo userInfo;
+UPOnlinePicoFunctionLibrary::GetLoggedInUser(userInfo);
+
+// Create a game session
+UPOnlinePicoFunctionLibrary::CreateSession(4, true);
+
+// Find sessions
+UPOnlinePicoFunctionLibrary::FindSessions();
+
+// Join a session
+UPOnlinePicoFunctionLibrary::JoinSession(sessionId);
+
+// Unlock achievement
+UPOnlinePicoFunctionLibrary::UnlockAchievement("tutorial_complete");
+
+// Write leaderboard score
+UPOnlinePicoFunctionLibrary::WriteLeaderboardScore("high_scores", 1000);
+
+// Get products for IAP
+UPOnlinePicoFunctionLibrary::GetProducts();
+
+// Purchase a product
+UPOnlinePicoFunctionLibrary::PurchaseProduct("product_id");
+
+// Create a room
+UPOnlinePicoFunctionLibrary::CreateRoom("my_room", true);
+
+// Register for notifications
+UPOnlinePicoFunctionLibrary::RegisterNotification();
+```
+
+Blueprint function groups:
 - **User**: `GetLoggedInUser`, `GetUserInfo`, `Login`, `Logout`
 - **Session**: `CreateSession`, `FindSessions`, `JoinSession`, `LeaveSession`
 - **Achievement**: `UnlockAchievement`, `GetAchievements`
@@ -203,6 +278,32 @@ The main Blueprint function library. Exposes all platform APIs as static C++ fun
 Enterprise (ToB) functions for kiosk mode, device management, and controlled deployments.
 
 ### Key API (`PICO_EnterpriseFunctionLibrary.h`, 168 KB)
+
+```cpp
+// Reboot device
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseControlDevice(EPXRDeviceControl::Reboot);
+
+// Silent install APK
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseControlPackage(EPXRPackageControl::SilenceInstall, "/sdcard/app.apk");
+
+// Set home key single-click to go back
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseSetHomeKey(EPXRHomeEvent::SingleClick, EPXRHomeFunction::Back);
+
+// Set screen-off delay to 30 seconds
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseSetScreenOffDelay(EPXRScreenOffDelay::ThirtySeconds);
+
+// Set sleep delay to 60 seconds
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseSetSleepDelay(EPXRSleepDelay::SixtySeconds);
+
+// Set USB mode to MTP
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseSetUSBConfigMode(EPXRUSBMode::MTP);
+
+// Disable auto-sleep system switch
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseSwitchSet(EPXRSwitchType::Off, EPXRSystemFunctionSwitch::AutoSleep);
+
+// Enable kiosk mode (lock to single app)
+UPICO_EnterpriseFunctionLibrary::PXR_EnterpriseSetKioskMode(true);
+```
 
 - **Device Control**: Reboot, shutdown, factory reset
 - **App Management**: Silent install/uninstall, app whitelist
@@ -239,6 +340,38 @@ Spatial audio rendering with ambisonics support.
 ### API (`pxr_audio_spatializer.h`, 61 KB)
 
 Native C API for spatial audio processing:
+
+```cpp
+// Initialize spatializer
+Pxr_Audio_Spatializer_Init(48000, 2);
+
+// Set listener pose (position + orientation)
+Pxr_Audio_Spatializer_Pose listenerPose;
+listenerPose.position = {0.0f, 0.0f, 0.0f};
+listenerPose.orientation = {0.0f, 0.0f, 0.0f, 1.0f};
+Pxr_Audio_Spatializer_SetListenerPose(&listenerPose);
+
+// Set source pose
+Pxr_Audio_Spatializer_Pose sourcePose;
+sourcePose.position = {2.0f, 0.0f, 0.0f};
+sourcePose.orientation = {0.0f, 0.0f, 0.0f, 1.0f};
+Pxr_Audio_Spatializer_SetSourcePose(sourceId, &sourcePose);
+
+// Set source directivity (cardioid pattern)
+Pxr_Audio_Spatializer_SetSourceDirectivity(sourceId, 0.5f, 0.5f);
+
+// Configure reverb
+Pxr_Audio_Spatializer_SetReverb(0.5f, 0.3f, 0.7f);
+
+// Process audio buffer (input -> output)
+float inputBuffer[480 * 2];
+float outputBuffer[480 * 2];
+Pxr_Audio_Spatializer_Process(sourceId, inputBuffer, outputBuffer, 480, 2);
+
+// Cleanup
+Pxr_Audio_Spatializer_Destroy();
+```
+
 - `Pxr_Audio_Spatializer_Init` — Initialize spatializer
 - `Pxr_Audio_Spatializer_Destroy` — Cleanup
 - `Pxr_Audio_Spatializer_SetListenerPose` — Set listener position/orientation
