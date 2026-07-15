@@ -272,7 +272,12 @@
 
     var sourceEl = $("detail-source");
     if (e.sourceUrl) {
-      sourceEl.innerHTML = '<a href="' + escapeHtml(e.sourceUrl) + '" target="_blank" rel="noopener">' + escapeHtml(e.sourceUrl) + '</a>';
+      var sourceLabel = e.sourceUrl;
+      var m = e.sourceUrl.match(/^https?:\/\/(gitlab|github)\.com\/(.+)$/i);
+      if (m) {
+        sourceLabel = m[1] + "/" + m[2];
+      }
+      sourceEl.innerHTML = '<a href="' + escapeHtml(e.sourceUrl) + '" target="_blank" rel="noopener">' + escapeHtml(sourceLabel) + '</a>';
     } else {
       sourceEl.textContent = "—";
     }
