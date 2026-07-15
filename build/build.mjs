@@ -77,6 +77,7 @@ async function buildEntries(files) {
     const readmeMd = await fetchReadme(f.fm.readme_url, f.rel);
     byCategory[f.category].push({
       name: f.fm.name,
+      humanname: f.fm.humanname,
       category: f.fm.category,
       status: f.fm.status,
       updated: f.fm.updated,

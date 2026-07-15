@@ -1,5 +1,6 @@
 ---
 name: gitlab.HttpAnimations.piconeo2-wivrn
+humanname: Pico Neo 2 WiVRn
 category: streaming
 status: working
 updated: 2026-07-15

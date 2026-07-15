@@ -186,6 +186,7 @@
       var q = state.search.toLowerCase();
       list = list.filter(function (e) {
         return (
+          (e.humanname || e.name).toLowerCase().indexOf(q) !== -1 ||
           e.name.toLowerCase().indexOf(q) !== -1 ||
           e.notes.toLowerCase().indexOf(q) !== -1 ||
           e.status.toLowerCase().indexOf(q) !== -1 ||
@@ -213,7 +214,7 @@
     var html = list.map(function (e) {
       return (
         '<tr class="entry-row" data-cat="' + escapeHtml(e.category) + '" data-name="' + escapeHtml(e.name) + '">' +
-          '<td class="name"><a>' + escapeHtml(e.name) + '</a></td>' +
+          '<td class="name"><a>' + escapeHtml(e.humanname || e.name) + '</a></td>' +
           '<td><span class="status status-' + escapeHtml(e.status) + '">' + escapeHtml(e.status) + '</span></td>' +
           '<td class="updated">' + escapeHtml(e.updated) + '</td>' +
           '<td class="notes">' + escapeHtml(e.notes) + '</td>' +
@@ -255,8 +256,8 @@
   function renderDetail() {
     var e = state.entry;
     if (!e) { showView("listing"); return; }
-    $("detail-title").textContent = e.name;
-    $("detail-breadcrumb-name").textContent = e.name;
+    $("detail-title").textContent = e.humanname || e.name;
+    $("detail-breadcrumb-name").textContent = e.humanname || e.name;
     var back = $("detail-back");
     back.textContent = cap(e.category);
     back.onclick = function () { state.category = e.category; resetFilters(); showView("listing"); };

@@ -157,6 +157,7 @@
       <h3>File template (entries)</h3>
       <pre><code>---
 name: gitlab.HttpAnimations.neorevived
+humanname: NeoRevived
 category: shims
 status: working
 updated: 2026-07-10
@@ -212,6 +213,7 @@ quirks:
       <p>The YAML block between the <code>---</code> markers is required. Here's what each field means:</p>
       <ul>
         <li><code>name</code>: must follow the format <code>platform.owner.project</code> (e.g. <code>gitlab.HttpAnimations.neorevived</code> or <code>github.user.project</code>). Must match the filename (without <code>.md</code>). Nested groups use dots: <code>gitlab.group.subgroup.project</code></li>
+        <li><code>humanname</code>: human-readable display name shown in the listing and detail pages (e.g. <code>Pico Neo 2 WiVRn</code>)</li>
         <li><code>category</code>: one of: <code>shims</code>, <code>streaming</code>, <code>decomp</code>, <code>projects</code></li>
         <li><code>status</code>: one of: <code>planned</code>, <code>in-progress</code>, <code>working</code>, <code>broken</code></li>
         <li><code>updated</code>: date of last meaningful change, format <code>YYYY-MM-DD</code></li>

@@ -57,6 +57,7 @@ function requireOneOf(file, data, key, allowed) {
 // Validate an entry file (shims / streaming / decomp / projects).
 export function validateEntry(file, fm, expectedCategory, baseName) {
   requireString(file, fm, "name");
+  requireString(file, fm, "humanname");
   requireOneOf(file, fm, "category", ENTRY_CATEGORIES);
   requireOneOf(file, fm, "status", STATUSES);
   requireDate(file, fm, "updated");
