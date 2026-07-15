@@ -275,6 +275,15 @@ td.notes { color: var(--text-dim); font-size: 13px; max-width: 400px; }
   border-radius: 4px;
 }
 .markdown-body table { margin-bottom: 12px; }
+.markdown-body blockquote {
+  border-left: 4px solid var(--border);
+  padding: 8px 16px;
+  margin-bottom: 12px;
+  color: var(--text-dim);
+  background: #f9f9f9;
+  border-radius: 0 4px 4px 0;
+}
+.markdown-body blockquote p:last-child { margin-bottom: 0; }
 
 /* === SPECS PAGE === */
 .specs-intro {

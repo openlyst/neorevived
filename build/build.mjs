@@ -18,8 +18,39 @@ const SRC_DIR = path.join(ROOT, "src");
 
 marked.setOptions({ gfm: true, breaks: false });
 
+const ALERT_LABELS = {
+  NOTE: "Note",
+  TIP: "Tip",
+  IMPORTANT: "Important",
+  WARNING: "Warning",
+  CAUTION: "Caution",
+};
+
+function preprocessAlerts(md) {
+  const lines = (md || "").split("\n");
+  const out = [];
+  let i = 0;
+  while (i < lines.length) {
+    const m = lines[i].match(/^>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*(.*)$/i);
+    if (m) {
+      const label = ALERT_LABELS[m[1].toUpperCase()] || "Note";
+      const firstLine = m[2].trim();
+      out.push(`> **${label}:** ${firstLine}`.trim());
+      i++;
+      while (i < lines.length && /^>/.test(lines[i])) {
+        out.push(lines[i]);
+        i++;
+      }
+      continue;
+    }
+    out.push(lines[i]);
+    i++;
+  }
+  return out.join("\n");
+}
+
 function renderMarkdown(md) {
-  return marked.parse(md || "");
+  return marked.parse(preprocessAlerts(md || ""));
 }
 
 async function fetchReadme(url, file) {
