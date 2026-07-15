@@ -296,6 +296,10 @@
         head.appendChild(version);
         head.appendChild(el("span", "download-date", d.date));
 
+        if (idx === 0) {
+          head.appendChild(el("span", "download-type download-latest", "Latest"));
+        }
+
         var typeLabel = d.isTrackingOnly
           ? "Version tracking only"
           : d.isRawFile

@@ -264,6 +264,10 @@ td.notes { color: var(--text-dim); font-size: 13px; max-width: 400px; }
   color: var(--text-faint);
   border: 1px dashed var(--border);
 }
+.download-latest {
+  background: #eafaf1;
+  color: #22c55e;
+}
 .download-notes {
   font-size: 13px;
   color: var(--text-dim);
