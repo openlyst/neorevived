@@ -9,7 +9,7 @@ license: GPL-2.0
 readme_url: https://gitlab.com/HttpAnimations/uboot-neo2/-/raw/main/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/uboot-neo2
 downloads: false
-notes: U-Boot bootloader port for the Pico Neo 2 VR headset (Qualcomm SDA845) — boots successfully with display output, USB fastboot gadget, and UFS storage working
+notes: U-Boot bootloader port for the Pico Neo 2.
 tags:
   - pico
   - neo2
