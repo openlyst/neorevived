@@ -1,4 +1,4 @@
-# NeoRevived CI — validate frontmatter, build the static site, deploy to Pages.
+# NeoRevived CI validate frontmatter, build the static site, deploy to Pages.
 stages:
   - validate
   - build

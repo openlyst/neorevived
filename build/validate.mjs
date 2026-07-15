@@ -1,4 +1,4 @@
-// validate.mjs — runs in CI on every MR. Checks every .md under /data
+// validate.mjs runs in CI on every MR. Checks every .md under /data
 // against the frontmatter schema. Exits non-zero on any violation.
 import { readDataFiles, DATA_DIR } from "./io.mjs";
 import {

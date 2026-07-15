@@ -29,7 +29,7 @@ export function readDataFiles() {
       try {
         parsed = matter(raw);
       } catch (e) {
-        throw new Error(`${abs}: invalid frontmatter — ${e.message}`);
+        throw new Error(`${abs}: invalid frontmatter ${e.message}`);
       }
       out.push({
         file: abs,

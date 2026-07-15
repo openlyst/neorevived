@@ -1,4 +1,4 @@
-// app.js — vanilla SPA logic. Reads window.SITE_DATA (inlined at build time)
+// app.js vanilla SPA logic. Reads window.SITE_DATA (inlined at build time)
 // and renders the six views. View state is mirrored to location.hash so URLs
 // are shareable and the browser back/forward buttons work.
 (function () {
