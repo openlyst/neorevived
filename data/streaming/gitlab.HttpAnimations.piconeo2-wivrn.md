@@ -10,6 +10,7 @@ notes: WiVRn client for the Pico Neo 2 and Neo 2 Eye, stream PC VR over Wi-Fi or
 tags:
   - wivrn
   - openxr
+  - pvr
   - streaming
   - pico-neo-2
 ---
