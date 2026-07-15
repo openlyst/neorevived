@@ -308,7 +308,9 @@
         s.quirks.forEach(function (q) {
           var wrap = el("div", "quirk");
           wrap.appendChild(el("div", "quirk-label", q.label));
-          wrap.appendChild(el("div", "quirk-desc", q.desc));
+          var desc = el("div", "quirk-desc");
+          desc.innerHTML = q.desc;
+          wrap.appendChild(desc);
           section.appendChild(wrap);
         });
       } else {
