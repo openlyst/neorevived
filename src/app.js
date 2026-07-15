@@ -287,8 +287,9 @@
       var dlSection = el("div", "downloads-section");
       dlSection.appendChild(el("h2", "downloads-title", "Downloads"));
 
-      e.downloadList.forEach(function (d) {
+      e.downloadList.forEach(function (d, idx) {
         var item = el("div", "download-item");
+        if (idx > 0) item.style.display = "none";
 
         var head = el("div", "download-head");
         var version = el("span", "download-version", d.version);
@@ -332,6 +333,20 @@
         }
         dlSection.appendChild(item);
       });
+
+      if (e.downloadList.length > 1) {
+        var moreBtn = el("button", "download-more-btn", "Show all versions (" + e.downloadList.length + ")");
+        var expanded = false;
+        moreBtn.onclick = function () {
+          expanded = !expanded;
+          var items = dlSection.querySelectorAll(".download-item");
+          for (var j = 1; j < items.length; j++) {
+            items[j].style.display = expanded ? "" : "none";
+          }
+          moreBtn.textContent = expanded ? "Show less" : "Show all versions (" + e.downloadList.length + ")";
+        };
+        dlSection.appendChild(moreBtn);
+      }
 
       dlContainer.appendChild(dlSection);
     }
