@@ -207,52 +207,125 @@ The `PXR_Plugin` static class in `PXR_Plugins.cs` is the primary API entry point
 
 ### Rendering
 
-- `UnityPicoVR_SetFoveationLevel(int level)` — Set FFR level
-- `UnityPicoVR_GetFoveationLevel()` — Get FFR level
-- `UnityPicoVR_SetFoveationParamets(float gainX, float gainY, float area, float minimum)` — Set custom FFR parameters
-- `Pvr_GetStencilMesh(int eye, ...)` — Get lens stencil mesh
-- `Pvr_EnableFoveation(bool enable)` — Enable/disable FFR
+```csharp
+// Set FFR level
+PXR_Plugin.UnityPicoVR_SetFoveationLevel((int)FoveationLevel.High);
+
+// Get current FFR level
+int level = PXR_Plugin.UnityPicoVR_GetFoveationLevel();
+
+// Set custom FFR parameters
+PXR_Plugin.UnityPicoVR_SetFoveationParamets(2.0f, 2.0f, 1.0f, 0.125f);
+
+// Enable FFR
+PXR_Plugin.Pvr_EnableFoveation(true);
+
+// Get stencil mesh for left eye
+int vertCount = 0, triCount = 0;
+IntPtr vertData = IntPtr.Zero, indexData = IntPtr.Zero;
+PXR_Plugin.Pvr_GetStencilMesh(0, ref vertCount, ref triCount, ref vertData, ref indexData);
+```
 
 ### Pass-Through Camera
 
-- `UnityPicoVR_camera_start()` — Start pass-through camera
-- `UnityPicoVR_camera_stop()` — Stop pass-through camera
-- `UnityPicoVR_camera_destroy()` — Destroy camera resources
-- `UnityPicoVR_camera_getRenderEventFunc()` — Get render event callback
+```csharp
+// Start pass-through camera
+PXR_Plugin.UnityPicoVR_camera_start();
+
+// Stop pass-through camera
+PXR_Plugin.UnityPicoVR_camera_stop();
+
+// Destroy camera resources
+PXR_Plugin.UnityPicoVR_camera_destroy();
+
+// Get render event callback for texture updates
+IntPtr renderFunc = PXR_Plugin.UnityPicoVR_camera_getRenderEventFunc();
+```
 
 ### System Info
 
-- `UPvr_GetSystemInfo(SystemInfoEnum type)` — Get device system info
-- `UPvr_GetHmdHardwareVersion()` — HMD hardware version
-- `UPvr_GetHmdFirmwareVersion()` — HMD firmware version
-- `UPvr_GetHmdSerialNumber()` — HMD serial number
-- `UPvr_GetHmdBatteryStatus()` — HMD battery level
-- `UPvr_GetHmdBatteryTemperature()` — HMD battery temperature
+```csharp
+// Get battery level
+string battery = PXR_Plugin.UPvr_GetSystemInfo(SystemInfoEnum.ELECTRIC_QUANTITY);
+
+// Get device model
+string model = PXR_Plugin.UPvr_GetSystemInfo(SystemInfoEnum.EQUIPMENT_MODEL);
+
+// Get HMD hardware version
+string hwVersion = PXR_Plugin.UPvr_GetHmdHardwareVersion();
+
+// Get HMD firmware version
+string fwVersion = PXR_Plugin.UPvr_GetHmdFirmwareVersion();
+
+// Get HMD serial number
+string serial = PXR_Plugin.UPvr_GetHmdSerialNumber();
+
+// Get HMD battery level (0-100)
+int battery = PXR_Plugin.UPvr_GetHmdBatteryStatus();
+
+// Get HMD battery temperature
+float temp = PXR_Plugin.UPvr_GetHmdBatteryTemperature();
+```
 
 ### Device Control (ToB Service)
 
-- `UPvr_ControlDevice(DeviceControlEnum action)` — Reboot or shutdown
-- `UPvr_ControlPackage(PackageControlEnum action, string path)` — Silent install/uninstall
-- `UPvr_SwitchSet(SwitchEnum type, SystemFunctionSwitchEnum function)` — Toggle system functions
-- `UPvr_SetHomeKey(HomeEventEnum event, HomeFunctionEnum function)` — Configure home key behavior
-- `UPvr_SetScreenOffDelay(ScreenOffDelayTimeEnum time)` — Set screen-off delay
-- `UPvr_SetSleepDelay(SleepDelayTimeEnum time)` — Set sleep delay
-- `UPvr_SetUSBConfigMode(USBConfigModeEnum mode)` — Set USB mode (MTP/Charge)
+```csharp
+// Reboot device
+PXR_Plugin.UPvr_ControlDevice(DeviceControlEnum.DEVICE_CONTROL_REBOOT);
+
+// Silent install APK
+PXR_Plugin.UPvr_ControlPackage(PackageControlEnum.PACKAGE_SILENCE_INSTALL, "/sdcard/app.apk");
+
+// Disable auto-sleep
+PXR_Plugin.UPvr_SwitchSet(SwitchEnum.S_OFF, SystemFunctionSwitchEnum.SFS_AUTOSLEEP);
+
+// Set home button single-click to go back
+PXR_Plugin.UPvr_SetHomeKey(HomeEventEnum.SINGLE_CLICK, HomeFunctionEnum.VALUE_HOME_BACK);
+
+// Set screen-off delay to 30 seconds
+PXR_Plugin.UPvr_SetScreenOffDelay(ScreenOffDelayTimeEnum.THIRTY);
+
+// Set sleep delay to 60 seconds
+PXR_Plugin.UPvr_SetSleepDelay(SleepDelayTimeEnum.SIXTY);
+
+// Set USB mode to MTP
+PXR_Plugin.UPvr_SetUSBConfigMode(USBConfigModeEnum.MTP);
+```
 
 ### Entitlement
 
-- `UPvr_AppEntitlementCheck(string appid)` — Verify app entitlement
-- `UPvr_AppEntitlementCheckExtra(string appid)` — Extended entitlement check (returns status code)
+```csharp
+// Basic entitlement check
+bool valid = PXR_Plugin.UPvr_AppEntitlementCheck("your_app_id");
+if (!valid) {
+    Debug.Log("App not entitled");
+}
+
+// Extended entitlement check
+int result = PXR_Plugin.UPvr_AppEntitlementCheckExtra("your_app_id");
+// 0=success, -1=invalid params, -2=service not exist, -3=timeout
+```
 
 ### Achievement
 
 The `PXR_Achievement` class provides achievement operations:
 
-- `GetAllAchievements()` — Fetch all achievement definitions
-- `GetAchievementByName(string name)` — Fetch specific achievement
-- `UnlockAchievement(string name)` — Unlock an achievement
-- `AddCount(string name, int count)` — Increment achievement count
-- `AddFields(string name, string fields, int count)` — Add fields to achievement
+```csharp
+// Fetch all achievement definitions
+PXR_Achievement.GetAllAchievements();
+
+// Fetch a specific achievement by name
+PXR_Achievement.GetAchievementByName("first_login");
+
+// Unlock an achievement
+PXR_Achievement.UnlockAchievement("tutorial_complete");
+
+// Increment achievement count
+PXR_Achievement.AddCount("coins_collected", 10);
+
+// Add fields to an achievement
+PXR_Achievement.AddFields("level_complete", "level_5", 1);
+```
 
 Uses callback-based async pattern via `PXR_Callback` and `PXR_Message` classes.
 
@@ -260,10 +333,19 @@ Uses callback-based async pattern via `PXR_Callback` and `PXR_Message` classes.
 
 The `PicoPaymentSDK` class provides in-app purchase functionality:
 
-- `Login()` — Pico account login
-- `PayOrder(...)` — Create and pay an order
-- `QueryOrder(...)` — Query order status
-- `Subscribe(...)` — Subscription management
+```csharp
+// Login to Pico account
+PicoPaymentSDK.Login();
+
+// Create and pay an order
+PicoPaymentSDK.PayOrder("product_id", "order_id", 9.99f, "USD");
+
+// Query order status
+PicoPaymentSDK.QueryOrder("order_id");
+
+// Subscribe to a product
+PicoPaymentSDK.Subscribe("product_id", "order_id", 14.99f, "USD");
+```
 
 Demo scene available at `Assets/Payment/Demo/Scenes/Demo.unity`.
 
