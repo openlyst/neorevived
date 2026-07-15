@@ -18,7 +18,7 @@ rows:
   - key: FOV
     value: Unknown
   - key: IPD
-    value: Unknown — runtime exposes <code>xrGetIPDPICO</code> / <code>xrSetIPDPICO</code>, suggesting software-readable IPD
+    value: Software settable — runtime exposes <code>xrGetIPDPICO</code> / <code>xrSetIPDPICO</code>
   - key: Tracking
     value: 6DOF inside-out, computer vision based (<code>ro.pvr.controller.service=cv</code>), <code>persist.pvr.global_6dof=true</code>
   - key: Controllers
@@ -32,7 +32,7 @@ rows:
   - key: Sensors
     value: Accelerometer (Bosch BMA2x2), Gyroscope (Bosch BMG160), Magnetometer (Bosch BMM150), Proximity (Sensortek STK3x1x), Hall Effect (ROHM BU52053NVX), 6DOF Pose (ICM206XX)
   - key: Audio
-    value: Built-in speakers (Qualcomm fluence audio), 3.5mm jack (unconfirmed), USB-C audio (unconfirmed)
+    value: Built-in speakers (Qualcomm fluence audio), 3.5mm jack, USB-C audio
   - key: Eye tracking
-    value: Tobii calibration packages present (<code>com.tobii.usercalibration.pico</code>, <code>com.pvr.tobservice</code> v2.1.3), but <code>pxr.vendorhw.eye=0</code> — hardware not present on this unit
+    value: Tobii calibration packages present (<code>com.tobii.usercalibration.pico</code>, <code>com.pvr.tobservice</code> v2.1.3), but <code>pxr.vendorhw.eye=0</code> — hardware not available at time of testing
 ---
