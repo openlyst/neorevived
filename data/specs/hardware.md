@@ -12,7 +12,7 @@ rows:
   - key: RAM
     value: 6 GB (5822388 kB reported by <code>/proc/meminfo</code>), LPDDR4X (per SDM845 spec)
   - key: Storage
-    value: 128 GB (103 GB usable on <code>/data</code>), UFS 2.1 (per SDM845 spec)
+    value: 64GB Mainland Chinese, 128 GB WW, UFS 2.1 (per SDM845 spec)
   - key: Display
     value: Single LCD panel (JDI554K), 2160x3840 portrait / 3840x2160 landscape, 72 Hz refresh
   - key: FOV
