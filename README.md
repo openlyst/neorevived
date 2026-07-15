@@ -1,5 +1,7 @@
 # NeoRevived
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 A static, account-free tracker for the Pico Neo 2 headset revival effort. All content is community-contributed via merge requests — no coding required.
 
 ## What this tracks
