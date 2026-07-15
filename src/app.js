@@ -561,9 +561,10 @@
           tbl.appendChild(tr);
         });
         section.appendChild(tbl);
-      } else {
+      }
+      if (s.bodyHtml) {
         var free = el("div", "specs-freeform markdown-body");
-        free.innerHTML = s.bodyHtml || "";
+        free.innerHTML = s.bodyHtml;
         section.appendChild(free);
       }
       container.appendChild(section);

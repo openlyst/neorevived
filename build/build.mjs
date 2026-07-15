@@ -222,7 +222,8 @@ function buildSdks(files) {
     };
     if (f.fm.type === "table") {
       section.rows = f.fm.rows;
-    } else {
+    }
+    if (f.body) {
       section.bodyHtml = renderMarkdown(f.body);
     }
     sections.push(section);
