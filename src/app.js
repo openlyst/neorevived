@@ -267,6 +267,7 @@
 
     $("detail-updated").textContent = e.updated;
     $("detail-author").textContent = e.author;
+    $("detail-license").textContent = e.license || "—";
 
     var tagsEl = $("detail-tags");
     tagsEl.innerHTML = "";

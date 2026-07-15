@@ -22,23 +22,39 @@ function renderMarkdown(md) {
   return marked.parse(md || "");
 }
 
+async function fetchReadme(url, file) {
+  try {
+    const res = await fetch(url, { redirect: "follow" });
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    }
+    const text = await res.text();
+    return text.trim();
+  } catch (e) {
+    throw new Error(`${file}: failed to fetch readme_url "${url}": ${e.message}`);
+  }
+}
+
 // Build the entries index (shims/streaming/decomp/projects).
-function buildEntries(files) {
+async function buildEntries(files) {
   const byCategory = {};
   for (const cat of ENTRY_CATEGORIES) byCategory[cat] = [];
 
   for (const f of files) {
     if (!ENTRY_CATEGORIES.includes(f.category)) continue;
     validateEntry(f.rel, f.fm, f.category, f.baseName);
+    const readmeMd = await fetchReadme(f.fm.readme_url, f.rel);
     byCategory[f.category].push({
       name: f.fm.name,
       category: f.fm.category,
       status: f.fm.status,
       updated: f.fm.updated,
       author: f.fm.author,
+      license: f.fm.license,
+      readmeUrl: f.fm.readme_url,
       tags: Array.isArray(f.fm.tags) ? f.fm.tags : [],
       notes: f.fm.notes,
-      bodyHtml: renderMarkdown(f.body),
+      bodyHtml: renderMarkdown(readmeMd),
     });
   }
 
@@ -104,14 +120,14 @@ function copyStatic() {
   }
 }
 
-function main() {
+async function main() {
   if (!fs.existsSync(DATA_DIR)) {
     console.error("build: /data directory missing");
     process.exit(1);
   }
 
   const files = readDataFiles();
-  const entries = buildEntries(files);
+  const entries = await buildEntries(files);
   const news = buildNews(files);
   const specs = buildSpecs(files);
 

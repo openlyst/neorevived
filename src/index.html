@@ -78,6 +78,7 @@
         <div class="meta-item"><span class="meta-label">Status:</span><span class="status" id="detail-status"></span></div>
         <div class="meta-item"><span class="meta-label">Updated:</span><span id="detail-updated"></span></div>
         <div class="meta-item"><span class="meta-label">Author:</span><span id="detail-author"></span></div>
+        <div class="meta-item"><span class="meta-label">License:</span><span id="detail-license"></span></div>
       </div>
       <div class="detail-tags" id="detail-tags"></div>
     </div>
@@ -140,6 +141,9 @@
       <div class="note">
         You can do everything from the GitLab web interface. No local clone, no terminal, no build tools required.
       </div>
+      <div class="note note-warning">
+        Closed-source projects are not allowed. All entries must point to an openly licensed repository. If you're not sure which license to use, go with <strong>AGPL-3.0</strong>.
+      </div>
       <h3>Steps</h3>
       <ol>
         <li>Go to the <code>/data/&lt;category&gt;/</code> folder in the repo (e.g. <code>/data/shims/</code>)</li>
@@ -157,23 +161,15 @@ category: shims
 status: working
 updated: 2026-07-10
 author: calico
+license: AGPL-3.0
+readme_url: https://gitlab.com/HttpAnimations/neorevived/-/raw/main/data/shims/example.md
 notes: Drops in as libopenxr_loader.so, translates OpenXR 1.0 to native runtime
 tags:
   - openxr
   - api-shim
----
+---</code></pre>
 
-## Overview
-
-A drop-in replacement for libopenxr_loader.so that translates
-OpenXR 1.0 calls to the Pico Neo 2's native XR runtime.
-
-## Installation
-
-1. Download openxr-shim.so from the latest release
-2. Push to device with adb
-3. Set XR_RUNTIME_JSON environment variable
-4. Launch your OpenXR app</code></pre>
+The body below the second <code>---</code> is ignored for entries — the build fetches and renders the README from <code>readme_url</code> instead.
       <h3>File template (news)</h3>
       <pre><code>---
 date: 2026-07-14
@@ -220,13 +216,15 @@ quirks:
         <li><code>status</code>: one of: <code>planned</code>, <code>in-progress</code>, <code>working</code>, <code>broken</code></li>
         <li><code>updated</code>: date of last meaningful change, format <code>YYYY-MM-DD</code></li>
         <li><code>author</code>: your username or name</li>
+        <li><code>license</code>: the SPDX identifier of the project's license (e.g. <code>AGPL-3.0</code>, <code>MIT</code>, <code>GPL-3.0</code>)</li>
+        <li><code>readme_url</code>: raw URL to the project's README file (fetched and rendered at build time)</li>
         <li><code>notes</code>: one-line summary shown in the listing table</li>
         <li><code>tags</code>: optional list of tags for search/filtering</li>
       </ul>
       <p>News files use <code>date</code>, <code>title</code>, <code>author</code>, <code>summary</code>, and optional <code>tags</code>, no <code>status</code> field.</p>
       <p>Specs files use <code>section</code>, <code>type</code> (<code>table</code> / <code>quirks</code> / <code>freeform</code>), optional <code>order</code>, and either a <code>rows</code> or <code>quirks</code> list depending on <code>type</code>.</p>
-      <h3>Markdown body</h3>
-      <p>Everything below the second <code>---</code> is the entry content. Standard markdown is supported: headings, lists, code blocks, links, tables, and images. This gets rendered on the detail page.</p>
+      <h3>README fetching</h3>
+      <p>For entry categories (shims, streaming, decomp, projects), the build fetches the README from <code>readme_url</code> and renders it on the detail page. The markdown body in the <code>.md</code> file itself is ignored — only the frontmatter matters.</p>
       <h3>What happens after I submit?</h3>
       <ol>
         <li>GitLab CI runs a <code>validate</code> job that checks your frontmatter is correct</li>
