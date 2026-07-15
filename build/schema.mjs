@@ -9,6 +9,10 @@ export const SPEC_TYPES = ["table", "quirks", "freeform"];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const NAME_RE = /^(gitlab|github)\.[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+const COMMIT_HASH_RE = /^[0-9a-f]{7,40}$/i;
+const RAW_FILE_RE = /\.(apk|zip|tar\.gz|tgz|tar\.bz2|tbz2|tar\.xz|txz|tar|gz|bz2|xz|7z|rar|iso|deb|rpm|exe|msi|dmg|pkg|jar|aar|so|bin|img|rom|patch|diff)$/i;
+
+export { COMMIT_HASH_RE, RAW_FILE_RE };
 
 export function fail(file, msg) {
   const err = new Error(`${file}: ${msg}`);
@@ -67,6 +71,37 @@ export function validateEntry(file, fm, expectedCategory, baseName) {
   requireString(file, fm, "readme_url");
   requireString(file, fm, "sourceurl");
   requireArray(file, fm, "tags");
+
+  if (fm.downloads === undefined) fm.downloads = false;
+  if (typeof fm.downloads !== "boolean") {
+    throw fail(file, `field "downloads" must be a boolean (true/false)`);
+  }
+
+  if (fm.downloads) {
+    if (!Array.isArray(fm.download_list) || fm.download_list.length === 0) {
+      throw fail(file, 'field "download_list" is required when downloads is true');
+    }
+    for (const d of fm.download_list) {
+      if (typeof d !== "object" || d === null) {
+        throw fail(file, "each download entry must be an object");
+      }
+      requireString(file, d, "version");
+      requireString(file, d, "url");
+      requireDate(file, d, "date");
+      if (d.notes !== undefined && typeof d.notes !== "string") {
+        throw fail(file, 'download "notes" must be a string');
+      }
+      if (d.commit === undefined || d.commit === "") {
+        throw fail(file, 'download "commit" is required — versions must be locked to a commit');
+      }
+      if (typeof d.commit !== "string") {
+        throw fail(file, 'download "commit" must be a string (hash or URL)');
+      }
+      if (!COMMIT_HASH_RE.test(d.commit) && !d.commit.startsWith("http")) {
+        throw fail(file, `download "commit" must be a git hash or a full URL, got "${d.commit}"`);
+      }
+    }
+  }
 
   if (fm.category !== expectedCategory) {
     throw fail(

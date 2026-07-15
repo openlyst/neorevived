@@ -83,6 +83,7 @@
       </div>
       <div class="detail-tags" id="detail-tags"></div>
     </div>
+    <div id="detail-downloads"></div>
     <div class="markdown-body" id="detail-body"></div>
   </div>
 </div>
@@ -166,6 +167,7 @@ author: calico
 license: AGPL-3.0
 readme_url: https://gitlab.com/HttpAnimations/neorevived/-/raw/main/data/shims/example.md
 sourceurl: https://gitlab.com/HttpAnimations/neorevived
+downloads: false
 notes: Drops in as libopenxr_loader.so, translates OpenXR 1.0 to native runtime
 tags:
   - openxr
@@ -173,6 +175,39 @@ tags:
 ---</code></pre>
 
 The body below the second <code>---</code> is ignored for entries — the build fetches and renders the README from <code>readme_url</code> instead.
+      <h3>File template (entries with downloads)</h3>
+      <pre><code>---
+name: gitlab.HttpAnimations.neorevived
+humanname: NeoRevived
+category: shims
+status: working
+updated: 2026-07-10
+author: calico
+license: AGPL-3.0
+readme_url: https://gitlab.com/HttpAnimations/neorevived/-/raw/main/README.md
+sourceurl: https://gitlab.com/HttpAnimations/neorevived
+downloads: true
+download_list:
+  - version: RC5
+    url: https://gitlab.com/HttpAnimations/neorevived/-/releases/RC5
+    date: 2026-07-10
+    notes: Fix lobby flickering, improve stuttering
+    commit: 9d99acc0dcf0d58008930e10f6eda1fcabde2896
+  - version: RC4
+    url: https://gitlab.com/HttpAnimations/neorevived/-/jobs/artifacts/RC4/raw/app-debug.apk
+    date: 2026-07-01
+    notes: Harden rendering, fix controller buttons
+    commit: 13457b85ce3a656dd60ace3279cdf1a2d05f2313
+notes: Drops in as libopenxr_loader.so, translates OpenXR 1.0 to native runtime
+tags:
+  - openxr
+  - api-shim
+---</code></pre>
+
+When <code>downloads</code> is <code>true</code>, a downloads section appears on the project's detail page. Each version shows the version label, release date, a direct download or external link (detected automatically from the URL), and a link to the exact commit it was built from.
+      <div class="note note-warning">
+        URL shorteners and ad-supported download services (adfly, linkvertise, bit.ly, etc.) are not allowed. All download URLs must be direct links to the file or the official release page. Every version must be locked to a specific commit hash or commit URL. Entries that don't follow these rules can still be submitted but have a high chance of not being merged or updated.
+      </div>
       <h3>File template (news)</h3>
       <pre><code>---
 date: 2026-07-14
@@ -223,6 +258,17 @@ quirks:
         <li><code>license</code>: the SPDX identifier of the project's license (e.g. <code>AGPL-3.0</code>, <code>MIT</code>, <code>GPL-3.0</code>)</li>
         <li><code>readme_url</code>: raw URL to the project's README file (fetched and rendered at build time)</li>
         <li><code>sourceurl</code>: URL to the project's repository page (e.g. <code>https://gitlab.com/HttpAnimations/neorevived</code>)</li>
+        <li><code>downloads</code>: boolean, set to <code>true</code> if the project has downloadable releases</li>
+        <li><code>download_list</code>: required when <code>downloads</code> is <code>true</code>. List of download entries, each with:</li>
+      </ul>
+      <ul style="margin-left: 20px;">
+        <li><code>version</code>: version label (e.g. <code>RC5</code>, <code>v0.3</code>)</li>
+        <li><code>url</code>: direct download link or release page URL</li>
+        <li><code>date</code>: release date in <code>YYYY-MM-DD</code> format</li>
+        <li><code>notes</code>: optional short changelog for that version</li>
+        <li><code>commit</code>: required — full commit hash (e.g. <code>fa32a521f16d3f697b6357c737940df3548301b2</code>) or full commit URL. If a bare hash is provided and <code>sourceurl</code> is a GitLab/GitHub URL, the build auto-generates the commit link</li>
+      </ul>
+      <ul>
         <li><code>notes</code>: one-line summary shown in the listing table</li>
         <li><code>tags</code>: optional list of tags for search/filtering</li>
       </ul>

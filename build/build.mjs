@@ -11,6 +11,8 @@ import {
   validateEntry,
   validateNews,
   validateSpecs,
+  COMMIT_HASH_RE,
+  RAW_FILE_RE,
 } from "./schema.mjs";
 
 const PUBLIC_DIR = path.join(ROOT, "public");
@@ -75,7 +77,7 @@ async function buildEntries(files) {
     if (!ENTRY_CATEGORIES.includes(f.category)) continue;
     validateEntry(f.rel, f.fm, f.category, f.baseName);
     const readmeMd = await fetchReadme(f.fm.readme_url, f.rel);
-    byCategory[f.category].push({
+    const entry = {
       name: f.fm.name,
       humanname: f.fm.humanname,
       category: f.fm.category,
@@ -87,8 +89,33 @@ async function buildEntries(files) {
       sourceUrl: f.fm.sourceurl,
       tags: Array.isArray(f.fm.tags) ? f.fm.tags : [],
       notes: f.fm.notes,
+      downloads: f.fm.downloads === true,
+      downloadList: [],
       bodyHtml: renderMarkdown(readmeMd),
-    });
+    };
+
+    if (f.fm.downloads === true && Array.isArray(f.fm.download_list)) {
+      const sourceUrl = f.fm.sourceurl.replace(/\/$/, "");
+      const isGitLab = sourceUrl.includes("gitlab.com");
+      const commitPath = isGitLab ? "/-/commit/" : "/commit/";
+      entry.downloadList = f.fm.download_list.map((d) => {
+        let commitUrl = d.commit;
+        if (COMMIT_HASH_RE.test(d.commit)) {
+          commitUrl = sourceUrl + commitPath + d.commit;
+        }
+        return {
+          version: d.version,
+          url: d.url,
+          date: d.date,
+          notes: d.notes || "",
+          commit: d.commit,
+          commitUrl,
+          isRawFile: RAW_FILE_RE.test(d.url),
+        };
+      }).sort((a, b) => b.date.localeCompare(a.date));
+    }
+
+    byCategory[f.category].push(entry);
   }
 
   for (const cat of ENTRY_CATEGORIES) {

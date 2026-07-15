@@ -281,6 +281,52 @@
     tagsEl.innerHTML = "";
     (e.tags || []).forEach(function (t) { tagsEl.appendChild(el("span", "tag", t)); });
 
+    var dlContainer = $("detail-downloads");
+    dlContainer.innerHTML = "";
+    if (e.downloads && e.downloadList && e.downloadList.length > 0) {
+      var dlSection = el("div", "downloads-section");
+      dlSection.appendChild(el("h2", "downloads-title", "Downloads"));
+
+      e.downloadList.forEach(function (d) {
+        var item = el("div", "download-item");
+
+        var head = el("div", "download-head");
+        var version = el("span", "download-version", d.version);
+        head.appendChild(version);
+        head.appendChild(el("span", "download-date", d.date));
+
+        var typeLabel = d.isRawFile
+          ? "Direct download"
+          : "External link";
+        var typeEl = el("span", "download-type " + (d.isRawFile ? "download-raw" : "download-offsite"), typeLabel);
+        head.appendChild(typeEl);
+
+        item.appendChild(head);
+
+        if (d.notes) {
+          item.appendChild(el("div", "download-notes", d.notes));
+        }
+
+        var links = el("div", "download-links");
+        var dlLink = el("a", "download-link", d.isRawFile ? "Download" : "Open page");
+        dlLink.href = d.url;
+        dlLink.target = "_blank";
+        dlLink.rel = "noopener";
+        links.appendChild(dlLink);
+
+        var commitLink = el("a", "download-commit", "Commit: " + d.commit.substring(0, 12));
+        commitLink.href = d.commitUrl;
+        commitLink.target = "_blank";
+        commitLink.rel = "noopener";
+        links.appendChild(commitLink);
+
+        item.appendChild(links);
+        dlSection.appendChild(item);
+      });
+
+      dlContainer.appendChild(dlSection);
+    }
+
     $("detail-body").innerHTML = e.bodyHtml || "<p><em>No content.</em></p>";
   }
 
