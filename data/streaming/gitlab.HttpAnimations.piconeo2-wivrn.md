@@ -11,20 +11,14 @@ sourceurl: https://gitlab.com/HttpAnimations/piconeo2-wivrn
 downloads: true
 download_list:
   - version: RC6
-    url: https://gitlab.com/HttpAnimations/piconeo2-wivrn/-/releases/RC6
     date: 2026-07-15
     notes: Eye tracking for Neo 2 Eye, pupil dilation, fix audio stuttering, dynamic bitrate, 21ms motion-to-photon latency, joystick axis fix, recenter position fix
-    commit: 510a0a58a3b83b93e817c4e16c40a0e32e80df95
   - version: RC5
-    url: https://gitlab.com/HttpAnimations/piconeo2-wivrn/-/releases/RC5
     date: 2026-07-08
     notes: Fix lobby flickering on low battery, improve stuttering, bitrate slider, USB pairing fixes
-    commit: 9d99acc0dcf0d58008930e10f6eda1fcabde2896
   - version: RC4
-    url: https://gitlab.com/HttpAnimations/piconeo2-wivrn/-/releases/RC4
     date: 2026-07-01
     notes: Harden rendering, fix controller buttons, 300Hz tracking, native resolution, IPD slider, microphone support
-    commit: 13457b85ce3a656dd60ace3279cdf1a2d05f2313
   - version: RC3
     date: 2026-06-20
     notes: Fix all stuttering and jitters, fix memory leak
