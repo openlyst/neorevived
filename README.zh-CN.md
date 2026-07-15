@@ -1,5 +1,7 @@
 # NeoRevived
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 一个静态的、无需注册的 Pico Neo 2 头显复兴项目追踪站。所有内容均通过合并请求由社区贡献——无需编程。
 
 ## 追踪内容
