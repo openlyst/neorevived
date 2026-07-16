@@ -482,6 +482,63 @@
     }
 
     $("detail-body").innerHTML = e.bodyHtml || "<p><em>No content.</em></p>";
+
+    var compatContainer = $("detail-compatibility");
+    compatContainer.innerHTML = "";
+    if (e.compatibility && e.compatibility.rows && e.compatibility.rows.length > 0) {
+      var section = el("div", "compat-section");
+      section.appendChild(el("h2", "compat-title", "Compatibility"));
+
+      var tbl = document.createElement("table");
+      tbl.className = "compat-table";
+
+      var thead = document.createElement("thead");
+      var headRow = document.createElement("tr");
+      (e.compatibility.columns || []).forEach(function (col) {
+        var th = el("th", null, col.label || col.key);
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+      tbl.appendChild(thead);
+
+      var tbody = document.createElement("tbody");
+      e.compatibility.rows.forEach(function (row) {
+        var tr = document.createElement("tr");
+        (e.compatibility.columns || []).forEach(function (col) {
+          var td = document.createElement("td");
+          var val = row[col.key] || "";
+          if (col.type === "link" && val) {
+            var a = el("a", null, val);
+            a.href = val;
+            a.target = "_blank";
+            a.rel = "noopener";
+            td.appendChild(a);
+          } else if (col.type === "status" && val) {
+            var lower = val.toLowerCase();
+            var statusClass = "compat-status compat-status-";
+            if (lower === "works") statusClass += "works";
+            else if (lower === "partial") statusClass += "partial";
+            else if (lower === "broken") statusClass += "broken";
+            else if (lower === "bricked") statusClass += "bricked";
+            else if (lower === "untested") statusClass += "untested";
+            else statusClass += "unknown";
+            td.appendChild(el("span", statusClass, val));
+          } else {
+            td.textContent = val;
+          }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      tbl.appendChild(tbody);
+      section.appendChild(tbl);
+
+      var wrap = el("div", "table-wrap");
+      wrap.appendChild(tbl);
+      section.appendChild(wrap);
+
+      compatContainer.appendChild(section);
+    }
   }
 
   // ---------- specs ----------

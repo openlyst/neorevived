@@ -106,6 +106,66 @@ async function fetchReadme(url, file) {
   }
 }
 
+function parseCompatSpec(body) {
+  var m = (body || "").match(/```json\s+compat[\s\S]*?\n([\s\S]*?)```/);
+  if (!m) return null;
+  try {
+    return JSON.parse(m[1].trim());
+  } catch (e) {
+    return null;
+  }
+}
+
+function parseTableRow(line) {
+  var s = line.trim();
+  if (s.startsWith("|")) s = s.slice(1);
+  if (s.endsWith("|")) s = s.slice(0, -1);
+  return s.split("|");
+}
+
+function parseCompatTable(md, spec) {
+  var lines = (md || "").split("\n");
+  var header = (spec.table_header || "").trim();
+  var startIdx = -1;
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].trim() === header) { startIdx = i; break; }
+  }
+  if (startIdx === -1) return [];
+
+  var rowIdx = startIdx + 1;
+  if (rowIdx < lines.length && /^\|[\s\-:]+\|/.test(lines[rowIdx].trim())) {
+    rowIdx++;
+  }
+
+  var columns = spec.columns || [];
+  var rows = [];
+  while (rowIdx < lines.length) {
+    var line = lines[rowIdx].trim();
+    if (!line.startsWith("|") || line === "|") break;
+    var cells = parseTableRow(line);
+    if (cells.length === 0) break;
+    var row = {};
+    for (var c = 0; c < columns.length && c < cells.length; c++) {
+      row[columns[c].key] = cells[c].trim();
+    }
+    rows.push(row);
+    rowIdx++;
+  }
+  return rows;
+}
+
+async function fetchCompat(url, file) {
+  try {
+    var res = await fetch(url, { redirect: "follow" });
+    if (!res.ok) {
+      throw new Error("HTTP " + res.status + " " + res.statusText);
+    }
+    return (await res.text()).trim();
+  } catch (e) {
+    throw new Error(file + ': failed to fetch compatibility_url "' + url + '": ' + e.message);
+  }
+}
+
 // Build the entries index (shims/streaming/decomp/projects).
 async function buildEntries(files) {
   const byCategory = {};
@@ -131,6 +191,21 @@ async function buildEntries(files) {
       downloadList: [],
       bodyHtml: renderMarkdown(readmeMd, f.fm.readme_url),
     };
+
+    if (f.fm.compatibility === true) {
+      var spec = parseCompatSpec(f.body);
+      if (!spec) {
+        throw new Error(f.rel + ': compatibility is true but no ```json compat block found in body');
+      }
+      var compatMd = await fetchCompat(f.fm.compatibility_url, f.rel);
+      var compatRows = parseCompatTable(compatMd, spec);
+      entry.compatibility = {
+        columns: spec.columns,
+        rows: compatRows,
+      };
+    } else {
+      entry.compatibility = null;
+    }
 
     if (f.fm.downloads === true && Array.isArray(f.fm.download_list)) {
       const sourceUrl = f.fm.sourceurl.replace(/\/$/, "");

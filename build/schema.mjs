@@ -112,6 +112,15 @@ export function validateEntry(file, fm, expectedCategory, baseName) {
     }
   }
 
+  if (fm.compatibility === undefined) fm.compatibility = false;
+  if (typeof fm.compatibility !== "boolean") {
+    throw fail(file, `field "compatibility" must be a boolean (true/false)`);
+  }
+
+  if (fm.compatibility) {
+    requireString(file, fm, "compatibility_url");
+  }
+
   if (fm.category !== expectedCategory) {
     throw fail(
       file,

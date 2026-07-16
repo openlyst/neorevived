@@ -7,7 +7,7 @@ A static, account-free tracker for the Pico Neo 2 headset revival effort. All co
 ## What this tracks
 
 - **Specs**: hardware and software reference docs, verified via adb
-- **Shims**: compatibility layers for running modern apps
+- **Shims**: compatibility layers for running modern apps (some with embedded compatibility tables)
 - **Streaming**: PC and cloud streaming solutions
 - **Decomp**: reverse engineering of the system and runtime
 - **Projects**: community projects and research

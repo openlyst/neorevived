@@ -99,6 +99,7 @@
       <div class="detail-tags" id="detail-tags"></div>
     </div>
     <div id="detail-downloads"></div>
+    <div id="detail-compatibility"></div>
     <div class="markdown-body" id="detail-body"></div>
   </div>
 </div>
@@ -232,6 +233,41 @@ tags:
 ---</code></pre>
 
 When <code>downloads</code> is <code>true</code>, a downloads section appears on the project's detail page. Each version shows the version label, release date, a direct download or external link (detected automatically from the URL), and a link to the exact commit it was built from.
+      <h3>File template (entries with compatibility)</h3>
+      <pre><code>---
+name: gitlab.HttpAnimations.neorevived
+humanname: NeoRevived
+category: shims
+status: working
+updated: 2026-07-10
+author: calico
+license: AGPL-3.0
+readme_url: https://gitlab.com/HttpAnimations/neorevived/-/raw/main/README.md
+sourceurl: https://gitlab.com/HttpAnimations/neorevived
+downloads: false
+compatibility: true
+compatibility_url: https://gitlab.com/HttpAnimations/neorevived/-/raw/main/COMPATIBILITY.md
+notes: Drops in as libopenxr_loader.so, translates OpenXR 1.0 to native runtime
+tags:
+  - openxr
+  - api-shim
+---
+
+```json compat
+{
+  "table_header": "| Game | Status | Notes |",
+  "columns": [
+    { "key": "game", "label": "Game", "type": "text" },
+    { "key": "status", "label": "Status", "type": "status" },
+    { "key": "notes", "label": "Notes", "type": "text" }
+  ]
+}
+```</code></pre>
+
+When <code>compatibility</code> is <code>true</code>, the build fetches the markdown file at <code>compatibility_url</code> and parses the table whose header matches <code>table_header</code> in the JSON spec. The <code>```json compat</code> block goes in the body of your entry file (after the second <code>---</code>). Each column maps a table cell to a key. Supported column types: <code>text</code>, <code>link</code> (renders as clickable URL), <code>status</code> (colored badge). The table is rendered on the project's detail page.
+      <div class="note">
+        The <code>table_header</code> string must exactly match the header row in the remote markdown file, including pipes and spacing. The parser finds that line, skips the separator row, and reads all subsequent pipe-delimited rows.
+      </div>
       <div class="note note-warning">
         URL shorteners and ad-supported download services (adfly, linkvertise, bit.ly, etc.) are not allowed. All download URLs must be direct links to the file or the official release page. Every version must be locked to a specific commit hash or commit URL. Entries that don't follow these rules can still be submitted but have a high chance of not being merged or updated.
       </div>
@@ -296,6 +332,8 @@ quirks:
         <li><code>commit</code>: full commit hash (e.g. <code>fa32a521f16d3f697b6357c737940df3548301b2</code>) or full commit URL. Required when <code>url</code> is present. If both <code>url</code> and <code>commit</code> are omitted, the entry is version-tracking only. If a bare hash is provided and <code>sourceurl</code> is a GitLab/GitHub URL, the build auto-generates the commit link</li>
       </ul>
       <ul>
+        <li><code>compatibility</code>: boolean, set to <code>true</code> if the project has a remote compatibility table to embed</li>
+        <li><code>compatibility_url</code>: required when <code>compatibility</code> is <code>true</code>. Raw URL to a markdown file containing a pipe-delimited table</li>
         <li><code>notes</code>: one-line summary shown in the listing table</li>
         <li><code>tags</code>: optional list of tags for search/filtering</li>
       </ul>
