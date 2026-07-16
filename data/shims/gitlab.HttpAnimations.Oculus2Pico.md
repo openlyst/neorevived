@@ -11,7 +11,7 @@ sourceurl: https://gitlab.com/HttpAnimations/Oculus2Pico
 downloads: false
 compatibility: true
 compatibility_url: https://gitlab.com/HttpAnimations/Oculus2Pico/-/raw/main/COMPATIBILITY.md?ref_type=heads
-notes: Active fork of Juspertinry/Oculus2Pico. Patches Quest/Go Unity titles to run on the Pico Neo 2. Requires JDK 21 and Android SDK (platform-36, build-tools 36) to build.
+notes: Active fork of Juspertinry/Oculus2Pico.
 tags:
   - oculus
   - quest
