@@ -152,7 +152,7 @@
 
   function showView(view) {
     state.view = view;
-    if (view !== "detail" && view !== "news-detail") setHash(view);
+    setHash(view);
 
     if (view === "listing") {
       setActivePage("listing");
