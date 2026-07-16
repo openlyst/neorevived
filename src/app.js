@@ -533,7 +533,7 @@
       tbl.appendChild(tbody);
       section.appendChild(tbl);
 
-      var wrap = el("div", "table-wrap");
+      var wrap = el("div", "compat-scroll");
       wrap.appendChild(tbl);
       section.appendChild(wrap);
 
