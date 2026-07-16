@@ -9,6 +9,7 @@ license: MIT
 readme_url: https://raw.githubusercontent.com/Juspertinry/Oculus2Pico/refs/heads/main/README.md
 sourceurl: https://github.com/Juspertinry/Oculus2Pico
 downloads: false
+deprecated: true
 notes: Patch Quest/Go titles to run on the Pico Neo 2
 tags:
   - oculus

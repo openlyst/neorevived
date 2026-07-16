@@ -240,9 +240,12 @@
     }
 
     var html = list.map(function (e) {
+      var rowClass = "entry-row" + (e.deprecated ? " entry-deprecated" : "");
+      var nameCell = '<td class="name"><a>' + escapeHtml(e.humanname || e.name) + '</a>' +
+        (e.deprecated ? ' <span class="deprecated-badge">Deprecated</span>' : '') + '</td>';
       return (
-        '<tr class="entry-row" data-cat="' + escapeHtml(e.category) + '" data-name="' + escapeHtml(e.name) + '">' +
-          '<td class="name"><a>' + escapeHtml(e.humanname || e.name) + '</a></td>' +
+        '<tr class="' + rowClass + '" data-cat="' + escapeHtml(e.category) + '" data-name="' + escapeHtml(e.name) + '">' +
+          nameCell +
           '<td><span class="status status-' + escapeHtml(e.status) + '">' + escapeHtml(e.status) + '</span></td>' +
           '<td class="updated">' + escapeHtml(formatDate(e.updated)) + '</td>' +
           '<td class="notes">' + escapeHtml(e.notes) + '</td>' +
@@ -479,6 +482,15 @@
       }
 
       dlContainer.appendChild(dlSection);
+    }
+
+    var depBanner = $("detail-deprecated");
+    if (e.deprecated) {
+      depBanner.style.display = "";
+      depBanner.innerHTML = '<strong>Deprecated.</strong> This project is no longer actively maintained. It is provided as-is and may not work as expected.';
+    } else {
+      depBanner.style.display = "none";
+      depBanner.innerHTML = "";
     }
 
     $("detail-body").innerHTML = e.bodyHtml || "<p><em>No content.</em></p>";

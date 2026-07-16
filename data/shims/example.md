@@ -9,6 +9,7 @@ license: AGPL-3.0
 readme_url: https://gitlab.com/your-group/your-project/-/raw/main/README.md
 sourceurl: https://gitlab.com/your-group/your-project
 downloads: false
+deprecated: false
 compatibility: false
 compatibility_url: https://gitlab.com/your-group/your-project/-/raw/main/COMPATIBILITY.md
 notes: This is an example entry. Copy this file, rename it, and fill in your own content.

@@ -263,6 +263,31 @@ td.notes { color: var(--text-dim); font-size: 13px; max-width: 400px; }
 /* === DETAIL PAGE === */
 .detail-head { margin-bottom: 20px; }
 
+/* === DEPRECATED === */
+.deprecated-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: #fde8e8;
+  color: #b32020;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+tr.entry-deprecated td { opacity: 0.6; }
+.deprecated-banner {
+  background: #fff3e0;
+  border: 1px solid #e8a040;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #8a5a00;
+}
+
 /* === DOWNLOADS === */
 
 /* === COMPATIBILITY === */

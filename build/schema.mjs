@@ -112,6 +112,11 @@ export function validateEntry(file, fm, expectedCategory, baseName) {
     }
   }
 
+  if (fm.deprecated === undefined) fm.deprecated = false;
+  if (typeof fm.deprecated !== "boolean") {
+    throw fail(file, `field "deprecated" must be a boolean (true/false)`);
+  }
+
   if (fm.compatibility === undefined) fm.compatibility = false;
   if (typeof fm.compatibility !== "boolean") {
     throw fail(file, `field "compatibility" must be a boolean (true/false)`);

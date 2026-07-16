@@ -188,6 +188,7 @@ async function buildEntries(files) {
       tags: Array.isArray(f.fm.tags) ? f.fm.tags : [],
       notes: f.fm.notes,
       downloads: f.fm.downloads === true,
+      deprecated: f.fm.deprecated === true,
       downloadList: [],
       bodyHtml: renderMarkdown(readmeMd, f.fm.readme_url),
     };

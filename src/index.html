@@ -98,6 +98,7 @@
       </div>
       <div class="detail-tags" id="detail-tags"></div>
     </div>
+    <div id="detail-deprecated" class="deprecated-banner" style="display:none;"></div>
     <div id="detail-downloads"></div>
     <div id="detail-compatibility"></div>
     <div class="markdown-body" id="detail-body"></div>
@@ -334,6 +335,7 @@ quirks:
       <ul>
         <li><code>compatibility</code>: boolean, set to <code>true</code> if the project has a remote compatibility table to embed</li>
         <li><code>compatibility_url</code>: required when <code>compatibility</code> is <code>true</code>. Raw URL to a markdown file containing a pipe-delimited table</li>
+        <li><code>deprecated</code>: boolean, set to <code>true</code> if the project is no longer actively maintained. Shows a deprecated badge in the listing and a warning banner on the detail page</li>
         <li><code>notes</code>: one-line summary shown in the listing table</li>
         <li><code>tags</code>: optional list of tags for search/filtering</li>
       </ul>
