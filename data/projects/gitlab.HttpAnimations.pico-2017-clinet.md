@@ -11,7 +11,7 @@ sourceurl: https://gitlab.com/HttpAnimations/pico-2017-clinet
 downloads: false
 deprecated: false
 compatibility: false
-notes: Automated patch tool to run PicoVR 2.0.13 (com.picovr.wing) on Android 14/15. Fixes SDK version, sharedUserId, exported attributes, MODE_WORLD_READABLE crashes, and sensor OOB.
+notes: Automated patch tool to run PicoVR 2.0.13.
 tags:
   - pico
   - picovr
