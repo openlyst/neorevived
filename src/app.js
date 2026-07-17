@@ -168,7 +168,7 @@
         return a.dataset.page === "listing" && a.dataset.cat === state.category;
       });
       $("cat-title").textContent = cap(state.category);
-      setMetaDescription(cap(state.category) + " — NeoRevived. Anything to keep the Neo 2 Alive.");
+      setMetaDescription(cap(state.category) + " — Anything to keep the Neo 2 Alive.");
       setMetaTitle(cap(state.category));
       renderTable();
     } else if (view === "detail") {
@@ -190,19 +190,19 @@
     } else if (view === "specs") {
       setActivePage("specs");
       setActiveNav(function (a) { return a.dataset.page === "specs"; });
-      setMetaDescription("Pico Neo 2 hardware and software specs — NeoRevived.");
+      setMetaDescription("Pico Neo 2 hardware and software specs.");
       setMetaTitle("Specs");
       renderSpecs();
     } else if (view === "sdks") {
       setActivePage("sdks");
       setActiveNav(function (a) { return a.dataset.page === "sdks"; });
-      setMetaDescription("SDKs and tools for Pico Neo 2 development — NeoRevived.");
+      setMetaDescription("SDKs and tools for Pico Neo 2 development.");
       setMetaTitle("SDKs");
       renderSdks();
     } else if (view === "news") {
       setActivePage("news");
       setActiveNav(function (a) { return a.dataset.page === "news"; });
-      setMetaDescription("News and updates — NeoRevived. Anything to keep the Neo 2 Alive.");
+      setMetaDescription("News and updates. Anything to keep the Neo 2 Alive.");
       setMetaTitle("News");
       renderNews();
     } else if (view === "news-detail") {
@@ -219,7 +219,7 @@
     } else if (view === "contribute") {
       setActivePage("contribute");
       setActiveNav(function (a) { return a.dataset.page === "contribute"; });
-      setMetaDescription("How to contribute to NeoRevived — submit merge requests with markdown files.");
+      setMetaDescription("How to contribute — submit merge requests with markdown files.");
       setMetaTitle("Contribute");
     } else if (view === "search") {
       setActivePage("search");
