@@ -50,6 +50,14 @@
       .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  var DEFAULT_DESC = "Anything to keep the Neo 2 Alive.";
+  function setMetaDescription(desc) {
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", desc || DEFAULT_DESC);
+  }
+  function setMetaTitle(title) {
+    document.title = title ? title + " — NeoRevived" : "NeoRevived";
+  }
   function findEntry(category, name) {
     var list = ENTRIES[category] || [];
     for (var i = 0; i < list.length; i++) {
@@ -160,6 +168,8 @@
         return a.dataset.page === "listing" && a.dataset.cat === state.category;
       });
       $("cat-title").textContent = cap(state.category);
+      setMetaDescription(cap(state.category) + " — NeoRevived. Anything to keep the Neo 2 Alive.");
+      setMetaTitle(cap(state.category));
       renderTable();
     } else if (view === "detail") {
       setActivePage("detail");
@@ -167,28 +177,55 @@
         return a.dataset.page === "listing" && a.dataset.cat === state.category;
       });
       renderDetail();
+      if (state.entry) {
+        var e = findEntry(state.entry.category, state.entry.name);
+        if (e) {
+          var parts = [e.humanname || e.name];
+          if (e.notes) parts.push(e.notes);
+          parts.push("Status: " + e.status + ". License: " + (e.license || "unknown") + ". Author: " + e.author + ".");
+          setMetaDescription(parts.join(" "));
+          setMetaTitle(e.humanname || e.name);
+        }
+      }
     } else if (view === "specs") {
       setActivePage("specs");
       setActiveNav(function (a) { return a.dataset.page === "specs"; });
+      setMetaDescription("Pico Neo 2 hardware and software specs — NeoRevived.");
+      setMetaTitle("Specs");
       renderSpecs();
     } else if (view === "sdks") {
       setActivePage("sdks");
       setActiveNav(function (a) { return a.dataset.page === "sdks"; });
+      setMetaDescription("SDKs and tools for Pico Neo 2 development — NeoRevived.");
+      setMetaTitle("SDKs");
       renderSdks();
     } else if (view === "news") {
       setActivePage("news");
       setActiveNav(function (a) { return a.dataset.page === "news"; });
+      setMetaDescription("News and updates — NeoRevived. Anything to keep the Neo 2 Alive.");
+      setMetaTitle("News");
       renderNews();
     } else if (view === "news-detail") {
       setActivePage("news-detail");
       setActiveNav(function (a) { return a.dataset.page === "news"; });
       renderNewsDetail();
+      if (state.newsId) {
+        var p = findNews(state.newsId);
+        if (p) {
+          setMetaDescription(p.title + " — " + p.summary);
+          setMetaTitle(p.title);
+        }
+      }
     } else if (view === "contribute") {
       setActivePage("contribute");
       setActiveNav(function (a) { return a.dataset.page === "contribute"; });
+      setMetaDescription("How to contribute to NeoRevived — submit merge requests with markdown files.");
+      setMetaTitle("Contribute");
     } else if (view === "search") {
       setActivePage("search");
       setActiveNav(function (a) { return false; });
+      setMetaDescription(DEFAULT_DESC);
+      setMetaTitle("Search");
       renderSearchResults();
     }
   }
