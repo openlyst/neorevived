@@ -14,16 +14,14 @@ cache:
   paths:
     - node_modules/
 
-# Runs on every push and MR. Fails the pipeline on bad frontmatter.
+# Manual only — validate frontmatter.
 validate:
   stage: validate
   image: node:${NODE_VERSION}
   script:
     - npm ci
     - npm run validate
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH
+  when: manual
 
 # Builds the static site into public/.
 build:
@@ -36,6 +34,4 @@ build:
     paths:
       - public
     expire_in: 1 day
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH
+  when: manual
