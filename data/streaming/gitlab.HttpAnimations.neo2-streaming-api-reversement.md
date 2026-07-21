@@ -3,9 +3,10 @@ name: gitlab.HttpAnimations.neo2-streaming-api-reversement
 humanname: Pico Neo 2 <-> Monado Bridge
 category: streaming
 status: in-progress
-updated: 2026-07-15
+updated: 2026-07-21
 author: HttpAnimations
 license: AGPL-3.0
+deprecated: true
 readme_url: https://gitlab.com/HttpAnimations/neo2-streaming-api-reversement/-/raw/main/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/neo2-streaming-api-reversement
 downloads: false
