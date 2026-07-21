@@ -3,13 +3,16 @@ name: gitlab.HttpAnimations.piconeo2-wivrn
 humanname: Pico Neo 2 WiVRn
 category: streaming
 status: working
-updated: 2026-07-15
+updated: 2026-07-20
 author: calico
 license: AGPL-3.0
 readme_url: https://gitlab.com/HttpAnimations/piconeo2-wivrn/-/raw/main/README.md
 sourceurl: https://gitlab.com/HttpAnimations/piconeo2-wivrn
 downloads: true
 download_list:
+  - version: Beta 1.0
+    date: 2026-07-20
+    notes: Port back to PVR, passthrough support, movable UI, removed broken rescale, update to wivrn server 26.6.2, fix UI stuttering on low power mode, fix crash clicking pair
   - version: RC6
     date: 2026-07-15
     notes: Eye tracking for Neo 2 Eye, pupil dilation, fix audio stuttering, dynamic bitrate, 21ms motion-to-photon latency, joystick axis fix, recenter position fix
