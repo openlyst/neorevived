@@ -3,9 +3,10 @@ name: gitlab.HttpAnimations.neo2-store-decomp
 humanname: Pico NEO2 Store Decompilation
 category: decomp
 status: in-progress
-updated: 2026-07-15
+updated: 2026-07-21
 author: HttpAnimations
 license: AGPL-3.0
+deprecated: true
 readme_url: https://gitlab.com/HttpAnimations/neo2-store-decomp/-/raw/main/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/neo2-store-decomp
 downloads: false

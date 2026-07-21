@@ -3,9 +3,10 @@ name: gitlab.HttpAnimations.openxr-decomp-picone-2
 humanname: Pico Neo 2 OpenXR & Streaming Assistant Decompilation
 category: decomp
 status: in-progress
-updated: 2026-07-15
+updated: 2026-07-21
 author: HttpAnimations
 license: AGPL-3.0
+deprecated: true
 readme_url: https://gitlab.com/HttpAnimations/openxr-decomp-picone-2/-/raw/main/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/openxr-decomp-picone-2
 downloads: false
