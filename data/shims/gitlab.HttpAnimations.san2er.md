@@ -3,9 +3,10 @@ name: gitlab.HttpAnimations.san2er
 humanname: san2er (Patch Neo 3 PVR Games For Neo 2)
 category: shims
 status: in-progress
-updated: 2026-07-15
+updated: 2026-07-21
 author: HttpAnimations
 license: AGPL-3.0
+deprecated: true
 readme_url: https://gitlab.com/HttpAnimations/san2er/-/raw/main/pvr-neo2-shim/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/san2er
 downloads: false
