@@ -3,9 +3,10 @@ name: gitlab.HttpAnimations.pico-linux
 humanname: Pico Neo 2 Linux Port
 category: projects
 status: in-progress
-updated: 2026-07-15
+updated: 2026-07-21
 author: HttpAnimations
 license: AGPL-3.0
+deprecated: true
 readme_url: https://gitlab.com/HttpAnimations/pico-linux/-/raw/main/README.md?ref_type=heads
 sourceurl: https://gitlab.com/HttpAnimations/pico-linux
 downloads: false
